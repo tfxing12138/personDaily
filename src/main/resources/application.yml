@@ -1,0 +1,14 @@
+server:
+  port: 10012
+
+spring:
+  application:
+    name: personDaily
+  datasource:
+    url: jdbc:mysql://119.29.187.18:3306/db_tfx?serverTimezone-UTC
+    username: root
+    password: tfx12138
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath:dao/*.xml
+
