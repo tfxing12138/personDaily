@@ -1,5 +1,6 @@
 package com.tfxing.persondaily.entity.po;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct;
  * @description :
  */
 @Component
+@Data
 public class User {
 
     private Long id;
@@ -23,5 +25,9 @@ public class User {
     }
     
     public User(){}
+    
+    public static void staticMethod() {
+        System.out.println("hello world static");
+    }
     
 }

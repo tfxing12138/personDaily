@@ -14,4 +14,6 @@ public class Person extends PersonFather{
     
     private String personName;
     
+    public static User user;
+    
 }
