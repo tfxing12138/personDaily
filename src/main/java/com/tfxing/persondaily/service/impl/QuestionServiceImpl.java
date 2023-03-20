@@ -29,12 +29,25 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addQuestion(Question question) {
-        questionMapper.insert(question);
-        
+
+        Answer answer = new Answer();
+        answer.setDescription("testTransactional0");
+        answerMapper.insert(answer);
+
+        saveAnswer();
+
+        int i = 1/0;
+//        questionMapper.insert(question);
         //更新选项nextQuestionId
-        updateAnswerNextQuestionId(question);
-        
+  //      updateAnswerNextQuestionId(question);
+
         return true;
+    }
+
+    private void saveAnswer() {
+        Answer answer = new Answer();
+        answer.setDescription("testTransactional1");
+        answerMapper.insert(answer);
     }
 
     /**
@@ -50,7 +63,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean addAnswer(Answer answer) {
+        int i = 1 / 0;
         return answerMapper.insert(answer) > 0;
     }
 }

@@ -1,13 +1,17 @@
 package com.tfxing.persondaily.controller;
 
+import com.tfxing.persondaily.entity.constant.JobOrderStateNodeConstant;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.PersonFather;
 import com.tfxing.persondaily.entity.po.PersonSon;
 import com.tfxing.persondaily.service.TestService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,7 +20,7 @@ import java.util.List;
  * @description :
  */
 @RestController
-@RequestMapping("/helloWorld")
+@RequestMapping("/test")
 public class TestController {
     
     @Resource
@@ -31,10 +35,30 @@ public class TestController {
 //        pList.add(new PersonFather());
         return "hello world";
     }
-    
+
     @PostMapping("/testmq")
     public String testmq(@RequestParam String json) {
         return testService.testmq(json);
-    } 
+    }
+
+    private final HashMap<String, List<String>> dataMap = new HashMap<>();
+    @PostConstruct
+    public void initMapData() {
+        dataMap.put("one", Arrays.asList("a","b"));
+        dataMap.put("two", Arrays.asList("c","d"));
+        dataMap.put("three", Arrays.asList("e","f"));
+        dataMap.put("three", Arrays.asList("e","f"));
+        dataMap.put("three", Arrays.asList("e","f"));
+    }
+
+    @PostMapping("/getMapData")
+    public List<String> getMapData(String key) {
+        return dataMap.get(key);
+    }
+
+    @GetMapping("/testInitMap")
+    public List<String> testInitMap(String key) {
+        return JobOrderStateNodeConstant.getJobOrderStateRuleMapByKey(key);
+    }
     
 }

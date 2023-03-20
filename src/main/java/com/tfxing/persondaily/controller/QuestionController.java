@@ -1,6 +1,7 @@
 package com.tfxing.persondaily.controller;
 
 import com.tfxing.persondaily.entity.ResponseInfo;
+import com.tfxing.persondaily.entity.annotation.Listen;
 import com.tfxing.persondaily.entity.po.Answer;
 import com.tfxing.persondaily.entity.po.Question;
 import com.tfxing.persondaily.service.QuestionService;
@@ -28,6 +29,7 @@ public class QuestionController {
     }
     
     @PostMapping("/addAnswer")
+    @Listen
     public ResponseInfo<Boolean> addAnswer(@RequestBody Answer answer) {
         return ResponseInfo.<Boolean>success(questionServiceImpl.addAnswer(answer));
     }
