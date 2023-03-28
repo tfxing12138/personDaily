@@ -61,5 +61,10 @@ public class TestController {
     public List<String> testInitMap(String key) {
         return JobOrderStateNodeConstant.getJobOrderStateRuleMapByKey(key);
     }
+
+    @GetMapping("/testTran")
+    public void testTran() {
+        testService.testTran();
+    }
     
 }

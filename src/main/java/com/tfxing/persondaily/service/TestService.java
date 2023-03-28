@@ -1,5 +1,7 @@
 package com.tfxing.persondaily.service;
 
+import com.tfxing.persondaily.entity.po.Question;
+
 /**
  * @author :tanfuxing
  * @date :2023/2/7
@@ -7,4 +9,8 @@ package com.tfxing.persondaily.service;
  */
 public interface TestService {
     String testmq(String json);
+
+    void testTran();
+
+    void saveQuestion(Question question);
 }

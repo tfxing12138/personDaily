@@ -2,12 +2,15 @@ package com.tfxing.persondaily.test;
 
 import com.tfxing.persondaily.entity.constant.JobOrderStateNodeConstant;
 import com.tfxing.persondaily.entity.po.Person;
+import com.tfxing.persondaily.utils.DateUtils;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -118,5 +121,29 @@ public class ApplicationTest {
         long difference =  (date.getTime()-orderDate.getTime())/86400000;
         System.out.println(Math.abs(difference));
 
+    }
+
+    @Test
+    public void testSwitch() {
+        switch (1) {
+            case 1:
+                System.out.println("one");
+                break;
+            default:
+                System.out.println("null");
+                break;
+        }
+    }
+
+    @Test
+    public void test07() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = sdf.parse("2023-05-12");
+
+        Long dayCount = DateUtils.subDayCount(date);
+        String content = "<h1>倒计时</h1> \n" +
+                "距离《塞尔达传说王国之泪》发售，还剩【%s】天";
+        content = String.format(content,dayCount);
+        System.out.println(content);
     }
 }

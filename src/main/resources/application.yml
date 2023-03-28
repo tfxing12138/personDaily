@@ -18,3 +18,9 @@ spring:
 mybatis:
   mapper-locations: classpath:dao/*.xml
 
+#邮件服务器
+mail:
+  user: t18370240624@163.com
+  password: VQMXDDHSNABKUEEI
+  host: smtp.163.com
+

@@ -1,0 +1,22 @@
+package com.tfxing.persondaily.controller;
+
+import com.tfxing.persondaily.service.MailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/mail")
+public class SpringTaskController {
+
+    @Autowired
+    private MailService mailService;
+
+    @Scheduled(cron = "0 0 12 * * ?")
+    @GetMapping("/test")
+    public void sendMail() throws Exception {
+        mailService.sendMail();
+    }
+}
