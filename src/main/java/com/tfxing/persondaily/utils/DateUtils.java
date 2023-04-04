@@ -23,6 +23,24 @@ public class DateUtils {
     }
 
     /**
+     * 计算指定时间到距离时间的小时差
+     * @return
+     */
+    public static Integer subHoursCount() {
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long from = 0;
+        long to = 0;
+        try {
+            from = DateUtil.now().getTime();
+            to = simpleFormat.parse("2023-05-11 23:00:00").getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Integer hours = (int) ((to - from)/(1000 * 60 * 60*1.0));
+        return hours;
+    }
+
+    /**
      * 日期字符串转日期格式
      * @param dateStr
      * @param patten

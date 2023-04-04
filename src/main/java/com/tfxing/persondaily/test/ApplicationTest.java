@@ -2,7 +2,9 @@ package com.tfxing.persondaily.test;
 
 import com.tfxing.persondaily.entity.constant.JobOrderStateNodeConstant;
 import com.tfxing.persondaily.entity.po.Person;
+import com.tfxing.persondaily.utils.CommonUtils;
 import com.tfxing.persondaily.utils.DateUtils;
+import com.tfxing.persondaily.utils.EmailUtil;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
@@ -12,7 +14,10 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -145,5 +150,89 @@ public class ApplicationTest {
                 "距离《塞尔达传说王国之泪》发售，还剩【%s】天";
         content = String.format(content,dayCount);
         System.out.println(content);
+    }
+
+    @Test
+    public void testSplit() {
+        String acctcode = "1001.01.01";
+//        int mid = acctcode.lastIndexOf(".");
+//        String acctCodePre = acctcode.substring(0,mid);
+//        String acctCodeEnd = acctcode.substring(mid+1);
+//        System.out.println(acctCodePre);
+//        System.out.println(acctCodeEnd);
+
+        String[] acctCodeSplit = acctcode.split("\\.");
+        System.out.println(acctCodeSplit);
+        System.out.println(acctCodeSplit[2]);
+    }
+
+    @Test
+    public void testSubHoursCount() {
+        Integer integer = DateUtils.subHoursCount();
+        System.out.println(integer);
+    }
+
+    @Test
+    public <T> void testLambda() {
+        /**
+         * 消费型：泛型参数为传入参数
+         * 没有返回值
+         */
+        Consumer<T> consumer = item -> {};
+
+        Consumer<List<String>> consumer1 = item -> {
+            for (String str : item) {
+                System.out.println(str);
+            }
+        };
+        consumer1.accept(Arrays.asList("one","two","three"));
+
+
+        /**
+         * 断定型：泛型参数为传入参数，返回值为boolean
+         */
+        Predicate<String> predicate = item -> {
+            return item.length() > 10;
+        };
+        System.out.println(predicate.test("hello world"));
+
+        /**
+         * 供给型：泛型参数为返回值
+         * 没有传入参数
+         */
+        Supplier<String> supplier = () -> {
+            return "hello world";
+        };
+        System.out.println(supplier);
+
+
+        /**
+         * 函数型：泛型参数为传入参数，返回值为泛型参数
+         */
+        Function<String,Boolean> function = item -> {
+            return item.length() > 10;
+        };
+        System.out.println(function.apply("hello world"));
+    }
+
+    @Test
+    public void test08() {
+        Supplier<List<String>> supplier = () -> {
+            return Arrays.asList("one","two","three");
+        };
+        List<String> collection = CommonUtils.getCollection(supplier);
+        System.out.println(collection.toString());
+    }
+
+    @Test
+    public void testSort() {
+        List<String> list = Arrays.asList("1000", "1001", "1101", "1006", "1003", "1002");
+        Arrays.sort(list.toArray());
+        System.out.println(list.toString());
+    }
+
+    @Test
+    public void testSendMail() throws Exception {
+        EmailUtil.sendMail("测试","hello world5","2867253802@qq.com");
     }
 }
