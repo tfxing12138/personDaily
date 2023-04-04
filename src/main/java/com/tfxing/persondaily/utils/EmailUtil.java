@@ -78,7 +78,7 @@ public class EmailUtil {
         // 5. 创建图片"节点"
         MimeBodyPart image = new MimeBodyPart();
         // 读取本地文件
-        DataHandler dh = new DataHandler(new FileDataSource("src/main/resources/系统触发需求分析.png"));
+        DataHandler dh = new DataHandler(new FileDataSource("src/main/resources/zelda.jpg"));
         // 将图片数据添加到"节点"
         image.setDataHandler(dh);
         // 为"节点"设置一个唯一编号（在文本"节点"将引用该ID）
