@@ -8,6 +8,7 @@ import com.tfxing.persondaily.utils.EmailUtil;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -234,5 +235,16 @@ public class ApplicationTest {
     @Test
     public void testSendMail() throws Exception {
         EmailUtil.sendMail("测试","hello world5","2867253802@qq.com");
+    }
+
+    @Test
+    public void testInt() {
+        Integer glyp = Integer.valueOf(String.format("%s%s",  2022, String.format("%0" + 2 + "d", 2)));
+        System.out.println(glyp);
+    }
+
+    @Test
+    public void testDateFormat() {
+
     }
 }

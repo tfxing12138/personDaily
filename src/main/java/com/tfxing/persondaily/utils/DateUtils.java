@@ -5,6 +5,7 @@ import org.assertj.core.util.DateUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtils {
 
@@ -55,5 +56,13 @@ public class DateUtils {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static final String parseDateToStr(final String format, final Date date) {
+        return new SimpleDateFormat(format).format(date);
+    }
+    public static Date getDateYearMonthByDate(Date datefm) throws ParseException {
+        String dateStr = parseDateToStr("yyyy-MM", datefm);
+        return new SimpleDateFormat("yyyy-MM").parse(dateStr);
     }
 }

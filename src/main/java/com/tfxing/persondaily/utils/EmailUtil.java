@@ -39,7 +39,7 @@ public class EmailUtil {
     /**
      * 收件人
      **/
-    public static final String RECEIVE_EMAIL_ACCOUNT = "2867253802@qq.com,2653673599@qq.com";
+    public static final String RECEIVE_EMAIL_ACCOUNT = "2867253802@qq.com";
 
     public static void sendMail(String subject, String content) throws Exception {
         sendMail(subject, content, RECEIVE_EMAIL_ACCOUNT);
