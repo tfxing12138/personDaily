@@ -53,4 +53,9 @@ public class QuestionServiceImpl2 implements QuestionService {
     public Boolean addAnswer(Answer answer) {
         return answerMapper.insert(answer) > 0;
     }
+
+    @Override
+    public Boolean testEqNull() {
+        return null;
+    }
 }

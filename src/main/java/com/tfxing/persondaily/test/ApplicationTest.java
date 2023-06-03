@@ -1,5 +1,7 @@
 package com.tfxing.persondaily.test;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.tfxing.persondaily.entity.constant.JobOrderStateNodeConstant;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.utils.CommonUtils;
@@ -14,6 +16,9 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -245,6 +250,144 @@ public class ApplicationTest {
 
     @Test
     public void testDateFormat() {
+        SimpleGPT simpleGPT = new SimpleGPT();
 
+        Map<String,String> baseMap = createBaseMap();
+        simpleGPT.setBaseMap(baseMap);
+
+        simpleGPT.listen("你是谁");
+        System.out.println(simpleGPT.reply());
+    }
+
+    /**
+     * 构建资料库
+     * @return
+     */
+    private Map<String, String> createBaseMap() {
+        HashMap<String, String> baseMap = new HashMap<>();
+        baseMap.put("你","我");
+        baseMap.put("是","是");
+        baseMap.put("谁","simpleGPT");
+        baseMap.put("?","。");
+        baseMap.put("现在","现在");
+
+        return baseMap;
+    }
+
+    @Test
+    public void testStr() {
+        String stringCellValue = "100023425253212312.00";
+        String[] split = stringCellValue.split("\\.");
+        String preValue = split[0];
+        char[] chars = preValue.toCharArray();
+
+        String str = "";
+        for (int i = chars.length - 1,j=1; i >= 0; i--,j++) {
+            str += chars[i];
+            if(j % 3 == 0 && i != 0) {
+                str += ",";
+            }
+        }
+        str = reverse(str);
+        str = str+"."+split[1];
+        System.out.println(str);
+    }
+
+    private String reverse(String str) {
+        return str == null ? null : (new StringBuilder(str)).reverse().toString();
+    }
+
+    @Test
+    public void testSubYearCount() {
+        System.out.println(getSubYearCount("2001-01-01"));
+    }
+
+    private Integer getSubYearCount(String datefm) {
+        String yearStr = datefm.substring(0, 4);
+        Integer year = Integer.parseInt(yearStr);
+
+        Integer subYearCount = DateUtil.year(new Date()) - year;
+        return subYearCount;
+    }
+
+    @Test
+    public void test09() {
+        System.out.println(splitFormula("=<1101>L-<1003>L"));
+
+    }
+
+    private Map<String,String> splitFormula(String formula) {
+        if (StringUtils.isEmpty(formula)) return null;
+        //去空格
+        String formulaTrim = formula.replaceAll("\\s*", "").substring(1);
+        //得到公式集合,LinkedHashMap 保证顺序
+        Map<String,String> map = new HashMap<>();
+
+        List<String> textList = new ArrayList<>();
+        List<String> symbolList = new ArrayList<>();
+
+        String text = "";
+        for (char ch : formulaTrim.toCharArray()) {
+
+            String symbol = String.valueOf(ch);
+            if (Arrays.asList("+","-").contains(symbol)) {
+                textList.add(text);
+                symbolList.add(symbol);
+                text = "";
+            } else {
+                text+=symbol;
+            }
+        }
+        textList.add(text);
+
+        if(symbolList.size()+1 != textList.size()) {
+            throw new RuntimeException("");
+        }
+
+        if(symbolList.size() <= 0) {
+            map.put(text,null);
+            return map;
+        }
+
+        for (int i = 0; i < symbolList.size(); i++) {
+            map.put(textList.get(i+1),symbolList.get(i));
+        }
+
+        return map;
+    }
+
+    @Test
+    public void testDate() {
+        int year = 2023;
+        int month = 2;
+
+        String dateStr = "202302"; // 指定年月
+        LocalDate date = LocalDate.parse(dateStr + "01", DateTimeFormatter.BASIC_ISO_DATE);
+        LocalDate dateEnd = date.with(TemporalAdjusters.lastDayOfMonth()); // 指定年月的最后一天
+        String format = dateEnd.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
+    }
+
+    public static String getLastDayofMonth1(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        //设置年份
+        cal.set(Calendar.YEAR, year);
+        //设置月份
+        cal.set(Calendar.MONTH, month-1);
+        //获取某月最大天数
+        int lastDay = cal.getActualMaximum(Calendar.DATE);
+        //设置日历中月份的最大天数
+        cal.set(Calendar.DAY_OF_MONTH, lastDay);
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
+        return sdf.format(cal.getTime());
+    }
+
+    @Test
+    public void testDateStr() {
+        String str = "2021-04-30";
+
+        System.out.println(DateUtil.format(DateUtils.str2Date(str,"yyyy-MM-dd"), "yyyy-MM-dd"));
     }
 }

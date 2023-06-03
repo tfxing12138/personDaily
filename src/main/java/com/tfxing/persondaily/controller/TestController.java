@@ -67,5 +67,9 @@ public class TestController {
         testService.testTran();
     }
 
+    @GetMapping("/testTran2")
+    public void testTran2() {
+        testService.testTran2();
+    }
     
 }

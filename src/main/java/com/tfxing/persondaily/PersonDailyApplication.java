@@ -1,6 +1,7 @@
 package com.tfxing.persondaily;
 
 import org.assertj.core.util.DateUtil;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @EnableScheduling
 @SpringBootApplication
+
 public class PersonDailyApplication {
 
     public static void main(String[] args) {

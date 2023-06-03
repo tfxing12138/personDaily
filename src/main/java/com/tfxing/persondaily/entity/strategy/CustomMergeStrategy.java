@@ -33,23 +33,30 @@ public class CustomMergeStrategy implements RowWriteHandler {
     public CustomMergeStrategy() {}
 
     @Override
-    public void beforeRowCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Integer integer, Integer integer1, Boolean aBoolean) {
+    public void beforeRowCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Integer rowIndex,
+                                Integer relativeRowIndex, Boolean isHead) {
+        Sheet sheet = writeSheetHolder.getSheet();
 
     }
 
     @Override
-    public void afterRowCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row, Integer integer, Boolean aBoolean) {
-
+    public void afterRowCreate(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row,
+                               Integer relativeRowIndex, Boolean isHead) {
+            Sheet sheet = writeSheetHolder.getSheet();
     }
 
     @Override
-    public void afterRowDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row, Integer integer, Boolean aBoolean) {
+    public void afterRowDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, Row row,
+                                Integer relativeRowIndex, Boolean isHead) {
         // 如果是标题,则直接返回
-        if (aBoolean) {
+        if (isHead) {
             return;
         }
-
-        // 获取当前sheet
+        for (int i = 0; i < 3; i++) {
+            CellRangeAddress cellRangeAddress = new CellRangeAddress(3, 6, i, i);
+            writeSheetHolder.getSheet().addMergedRegionUnsafe(cellRangeAddress);
+        }
+        /*// 获取当前sheet
         Sheet sheet = writeSheetHolder.getSheet();
 
         int rowNum = row.getRowNum();
@@ -70,7 +77,7 @@ public class CustomMergeStrategy implements RowWriteHandler {
         for (int i = 10; i < 12; i++) {
             CellRangeAddress cellRangeAddress = new CellRangeAddress(rowNum, lastRowNum, i, i);
             sheet.addMergedRegionUnsafe(cellRangeAddress);
-        }
+        }*/
     }
 
     private void titleHandle(Sheet sheet, String companyName, String glpName) {

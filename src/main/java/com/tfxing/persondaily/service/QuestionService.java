@@ -13,4 +13,6 @@ public interface QuestionService {
     Boolean addQuestion(Question question);
 
     Boolean addAnswer(Answer answer);
+
+    Boolean testEqNull();
 }

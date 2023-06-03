@@ -13,4 +13,6 @@ public interface TestService {
     void testTran();
 
     void saveQuestion(Question question);
+
+    void testTran2();
 }

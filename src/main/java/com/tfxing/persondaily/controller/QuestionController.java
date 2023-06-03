@@ -33,4 +33,10 @@ public class QuestionController {
     public ResponseInfo<Boolean> addAnswer(@RequestBody Answer answer) {
         return ResponseInfo.<Boolean>success(questionServiceImpl.addAnswer(answer));
     }
+
+    @PostMapping("/testEqNull")
+    @Listen
+    public ResponseInfo<Boolean> testEqNull() {
+        return ResponseInfo.<Boolean>success(questionServiceImpl.testEqNull());
+    }
 }

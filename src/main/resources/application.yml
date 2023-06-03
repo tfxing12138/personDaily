@@ -16,7 +16,7 @@ spring:
 #    password: admin
 #    virtual-host: localhost
 mybatis:
-  mapper-locations: classpath:dao/*.xml
+  mapper-locations: com/tfxing/persondaily/dao/*.xml
 
 #邮件服务器
 mail:

@@ -43,6 +43,7 @@ public class TPerson implements Serializable {
     /**
     * 部门id(demo_dept.id)
     */
+    @ExcelIgnore
     private Long deptId;
     /**
     * 手机号码
@@ -52,22 +53,27 @@ public class TPerson implements Serializable {
     /**
     * 人员状态（1:默认，2:暂定）
     */
+    @ExcelIgnore
     private Integer personStatus;
     /**
     * 是否删除（0:未删除，1:已删除）
     */
+    @ExcelIgnore
     private Integer isDel;
     /**
     * 领导id
     */
+    @ExcelIgnore
     private Long leaderId;
     /**
     * 创建时间
     */
+    @ExcelIgnore
     private Date createTime;
     /**
     * 更新时间
     */
+    @ExcelIgnore
     private Date updateTime;
 
 

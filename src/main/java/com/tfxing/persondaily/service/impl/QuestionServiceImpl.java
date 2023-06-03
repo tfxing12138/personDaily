@@ -1,5 +1,6 @@
 package com.tfxing.persondaily.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.tfxing.persondaily.dao.AnswerMapper;
 import com.tfxing.persondaily.dao.QuestionMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author :tanfuxing
@@ -67,5 +69,12 @@ public class QuestionServiceImpl implements QuestionService {
     public Boolean addAnswer(Answer answer) {
         int i = 1 / 0;
         return answerMapper.insert(answer) > 0;
+    }
+
+    @Override
+    public Boolean testEqNull() {
+        List<Answer> answerList = answerMapper.selectList(new LambdaQueryWrapper<Answer>().eq(Answer::getNextQuestionId, null));
+        System.out.println(answerList);
+        return null;
     }
 }
