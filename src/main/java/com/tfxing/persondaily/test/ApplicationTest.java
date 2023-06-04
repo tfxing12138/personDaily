@@ -1,12 +1,23 @@
 package com.tfxing.persondaily.test;
 
-import cn.hutool.core.date.DateTime;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.tfxing.persondaily.entity.constant.JobOrderStateNodeConstant;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.utils.CommonUtils;
 import com.tfxing.persondaily.utils.DateUtils;
 import com.tfxing.persondaily.utils.EmailUtil;
+import org.flowable.engine.*;
+import org.flowable.engine.history.HistoricActivityInstance;
+import org.flowable.engine.history.HistoricActivityInstanceQuery;
+import org.flowable.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.DeploymentBuilder;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.repository.ProcessDefinitionQuery;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
@@ -389,5 +400,180 @@ public class ApplicationTest {
         String str = "2021-04-30";
 
         System.out.println(DateUtil.format(DateUtils.str2Date(str,"yyyy-MM-dd"), "yyyy-MM-dd"));
+    }
+
+    @Test
+    public void testFlowable() {
+        ProcessEngineConfiguration processEngineConfiguration = new StandaloneProcessEngineConfiguration();
+        processEngineConfiguration.setJdbcDriver("com.mysql.cj.jdbc.Driver");
+        processEngineConfiguration.setJdbcUsername("root");
+        processEngineConfiguration.setJdbcPassword("tfx12138");
+        processEngineConfiguration.setJdbcUrl("jdbc:mysql://119.29.187.18:3306/flowable_demo?serverTimezone-UTC&nullCatalogMeansCurrent=true");
+        // 如果数据库中的表结构不在则新建
+        processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+    }
+
+    ProcessEngineConfiguration processEngineConfiguration = null;
+
+    @Before
+    public void before() {
+        ProcessEngineConfiguration processEngineConfiguration = new StandaloneProcessEngineConfiguration();
+        processEngineConfiguration.setJdbcDriver("com.mysql.cj.jdbc.Driver");
+        processEngineConfiguration.setJdbcUsername("root");
+        processEngineConfiguration.setJdbcPassword("tfx12138");
+        processEngineConfiguration.setJdbcUrl("jdbc:mysql://119.29.187.18:3306/flowable_demo?serverTimezone-UTC&nullCatalogMeansCurrent=true");
+        // 如果数据库中的表结构不在则新建
+        processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+
+        this.processEngineConfiguration = processEngineConfiguration;
+    }
+
+    /**
+     * 部署流程
+     */
+    @Test
+    public void testDeploy() {
+        // 1.获取ProcessEngine对象
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        // 2.获取RepositoryService
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        // 3.完成流程部署操作
+        DeploymentBuilder deployment = repositoryService.createDeployment();
+        Deployment deploy = deployment.addClasspathResource("holiday-request.bpmn20.xml")
+                .name("请假流程")
+                .deploy();
+
+        String deployId = deploy.getId();
+        System.out.println(deployId);
+    }
+
+    /**
+     * 查询流程
+     */
+    @Test
+    public void testDeployQuery() {
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery();
+
+        List<ProcessDefinition> processDefinitionList = processDefinitionQuery.processDefinitionKey("holidayRequest").list();
+
+        if(CollectionUtil.isEmpty(processDefinitionList)) {
+            System.out.println("not find object!!");
+            return;
+        }
+
+        for (ProcessDefinition processDefinition : processDefinitionList) {
+            System.out.println("processDefinition.getDeploymentId() = " + processDefinition.getDeploymentId());
+            System.out.println("processDefinition.getName() = " + processDefinition.getName());
+            System.out.println("processDefinition.getDescription() = " + processDefinition.getDescription());
+            System.out.println("processDefinition.getId() = " + processDefinition.getId());
+            System.out.println();
+        }
+    }
+
+    /**
+     * 删除流程
+     */
+    @Test
+    public void testRemoveDeploy() {
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+
+        // 删除部署的流程，如果部署的流程启动了，则不允许删除
+        // repositoryService.deleteDeployment("5001");
+
+        // 启动的流程删除
+        repositoryService.deleteDeployment("10001",true);
+        repositoryService.deleteDeployment("7501",true);
+    }
+
+    /**
+     * 启动流程实例
+     */
+    @Test
+    public void testRunProcess() {
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+
+        Map<String,Object> variables = new HashMap<>();
+        variables.put("name","link");
+        variables.put("description","升职加薪");
+
+        ProcessInstance holidayRequest = runtimeService.startProcessInstanceById("holidayRequest:1:17503",variables);
+        System.out.println("holidayRequest.getProcessDefinitionId() = " + holidayRequest.getProcessDefinitionId());
+        System.out.println("holidayRequest.getId() = " + holidayRequest.getId());
+        System.out.println("holidayRequest.getActivityId() = " + holidayRequest.getActivityId());
+    }
+
+    /**
+     * 查看任务
+     */
+    @Test
+    public void testQueryTask() {
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        TaskService taskService = processEngine.getTaskService();
+
+        // 获取流程引擎对象
+        List<Task> taskList = taskService.createTaskQuery()
+                .processDefinitionKey("holidayRequest")
+                .taskAssignee("link")
+                .list();
+
+        if(CollectionUtil.isEmpty(taskList)) {
+            System.out.println("not find object");
+            return;
+        }
+
+        for (Task task : taskList) {
+            System.out.println("task.getDescription() = " + task.getDescription());
+            System.out.println("task.getId() = " + task.getId());
+            System.out.println("task.getAssignee() = " + task.getAssignee());
+            System.out.println("task.getName() = " + task.getName());
+        }
+    }
+
+    /**
+     * 处理任务
+     */
+    @Test
+    public void testComplete() {
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery()
+                .processDefinitionKey("holidayRequest")
+                .taskAssignee("link")
+                .singleResult();
+
+        System.out.println("task.getName() = " + task.getName());
+
+        Map<String,Object> variables = new HashMap<>();
+        variables.put("approved",false);
+
+        taskService.complete(task.getId(),variables);
+        System.out.println(task.getDelegationState());
+    }
+
+    /**
+     * 查看历史记录
+     */
+    @Test
+    public void testCatHistory() {
+        ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
+        HistoryService historyService = processEngine.getHistoryService();
+
+        HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery();
+        List<HistoricActivityInstance> list = historicActivityInstanceQuery
+                .processDefinitionId("holidayRequest:1:17503")
+                .finished() // 查询完成状态的历史记录
+                .orderByHistoricActivityInstanceEndTime().asc() // 以结束时间作为排序字段并升序
+                .list();
+
+        for (HistoricActivityInstance historicActivityInstance : list) {
+            System.out.println(historicActivityInstance.getActivityId() + ":" + historicActivityInstance.getAssignee() + "," + historicActivityInstance.getActivityName());
+        }
+
     }
 }
