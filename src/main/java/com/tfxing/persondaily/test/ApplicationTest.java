@@ -443,8 +443,8 @@ public class ApplicationTest {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         // 3.完成流程部署操作
         DeploymentBuilder deployment = repositoryService.createDeployment();
-        Deployment deploy = deployment.addClasspathResource("holiday-request.bpmn20.xml")
-                .name("请假流程")
+        Deployment deploy = deployment.addClasspathResource("holiday-request2.bpmn20.xml")
+                .name("请假流程加审批人lisi")
                 .deploy();
 
         String deployId = deploy.getId();
@@ -460,7 +460,7 @@ public class ApplicationTest {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery();
 
-        List<ProcessDefinition> processDefinitionList = processDefinitionQuery.processDefinitionKey("holidayRequest").list();
+        List<ProcessDefinition> processDefinitionList = processDefinitionQuery.processDefinitionId("holidayRequest:3:27503").list();
 
         if(CollectionUtil.isEmpty(processDefinitionList)) {
             System.out.println("not find object!!");
@@ -504,7 +504,7 @@ public class ApplicationTest {
         variables.put("name","link");
         variables.put("description","升职加薪");
 
-        ProcessInstance holidayRequest = runtimeService.startProcessInstanceById("holidayRequest:1:17503",variables);
+        ProcessInstance holidayRequest = runtimeService.startProcessInstanceById("holidayRequest:6:50003",variables);
         System.out.println("holidayRequest.getProcessDefinitionId() = " + holidayRequest.getProcessDefinitionId());
         System.out.println("holidayRequest.getId() = " + holidayRequest.getId());
         System.out.println("holidayRequest.getActivityId() = " + holidayRequest.getActivityId());
@@ -520,7 +520,7 @@ public class ApplicationTest {
 
         // 获取流程引擎对象
         List<Task> taskList = taskService.createTaskQuery()
-                .processDefinitionKey("holidayRequest")
+                .processDefinitionId("holidayRequest:3:27503")
                 .taskAssignee("link")
                 .list();
 
@@ -545,8 +545,8 @@ public class ApplicationTest {
         ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery()
-                .processDefinitionKey("holidayRequest")
-                .taskAssignee("link")
+                .processDefinitionId("holidayRequest:6:50003")
+                .taskAssignee("lisi")
                 .singleResult();
 
         System.out.println("task.getName() = " + task.getName());
@@ -555,7 +555,6 @@ public class ApplicationTest {
         variables.put("approved",false);
 
         taskService.complete(task.getId(),variables);
-        System.out.println(task.getDelegationState());
     }
 
     /**
@@ -568,9 +567,9 @@ public class ApplicationTest {
 
         HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery();
         List<HistoricActivityInstance> list = historicActivityInstanceQuery
-                .processDefinitionId("holidayRequest:1:17503")
+                .processDefinitionId("holidayRequest:6:50003")
                 .finished() // 查询完成状态的历史记录
-                .orderByHistoricActivityInstanceEndTime().asc() // 以结束时间作为排序字段并升序
+                .orderByHistoricActivityInstanceStartTime().asc() // 以结束时间作为排序字段并升序
                 .list();
 
         for (HistoricActivityInstance historicActivityInstance : list) {
