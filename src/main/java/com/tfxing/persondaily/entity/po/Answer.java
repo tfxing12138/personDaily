@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
+import org.framework.core.annotation.Component;
 
 /**
  * @author :tanfuxing
@@ -11,6 +12,7 @@ import lombok.Data;
  * @description :
  */
 @Data
+@Component
 public class Answer {
 
     @ExcelIgnore

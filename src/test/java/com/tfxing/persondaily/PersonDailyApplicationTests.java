@@ -10,6 +10,7 @@ import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class PersonDailyApplicationTests {
@@ -243,5 +245,41 @@ class PersonDailyApplicationTests {
         Method method = clazz.getMethod("println", String.class);
         Object out = System.out;
         method.invoke(out, "Hello World!");
+    }
+
+    @Test
+    public void testSwitch() {
+        System.out.println(parseDorcCn("D"));
+    }
+
+    private String parseDorcCn(String doRc) {
+        String dorcCn = "";
+        switch (doRc) {
+            case "D": dorcCn = "借"; break;
+            case "C": dorcCn = "贷"; break;
+        }
+
+        return dorcCn;
+    }
+
+    @Test
+    public void testStrSplit() {
+        String message = "";
+        String[] split = message.split(":");
+        if(split.length < 2) {
+            return;
+        }
+        System.out.println(split[1]);
+    }
+
+    @Test
+    public void testDuplicate() {
+        List<Person> list = new ArrayList<>();
+        list.add(new Person("一班", "小明"));
+        list.add(new Person("二班", "小芳"));
+        list.add(new Person("一班", "小华"));
+
+        Map<String, String> map = list.stream().collect(Collectors.toMap(Person::getClassName, Person::getPersonName));
+        System.out.println(map);
     }
 }

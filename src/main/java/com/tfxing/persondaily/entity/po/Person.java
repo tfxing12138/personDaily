@@ -16,6 +16,8 @@ public class Person extends PersonFather{
 
     private Long id;
 
+    private String className;
+
     private String personName;
 
     private Date birth;
@@ -24,6 +26,11 @@ public class Person extends PersonFather{
 
     public Person(Long id, String personName) {
         this.id = id;
+        this.personName = personName;
+    }
+
+    public Person(String className,String personName) {
+        this.className = className;
         this.personName = personName;
     }
 

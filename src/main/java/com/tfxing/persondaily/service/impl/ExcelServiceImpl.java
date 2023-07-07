@@ -11,6 +11,9 @@ import com.tfxing.persondaily.dao.PersonMapper;
 import com.tfxing.persondaily.dao.QuestionMapper;
 import com.tfxing.persondaily.entity.po.*;
 import com.tfxing.persondaily.entity.strategy.CustomMergeStrategy;
+import com.tfxing.persondaily.entity.strategy.DemoMergeStrategy;
+import com.tfxing.persondaily.entity.strategy.ExcelMergeIndex;
+import com.tfxing.persondaily.entity.strategy.Point;
 import com.tfxing.persondaily.service.ExcelService;
 import com.tfxing.persondaily.utils.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -83,9 +86,11 @@ public class ExcelServiceImpl implements ExcelService {
         response.setCharacterEncoding("utf8");
         response.setHeader("Content-disposition", "attachment;filename=" + "全部数据.xlsx" );
 
+        DemoMergeStrategy demoMergeStrategy = new DemoMergeStrategy(Arrays.asList(new ExcelMergeIndex(new Point(0,0),new Point(1,2))));
+
         EasyExcel.write(response.getOutputStream())
                 .head(TPerson.class)
-                .registerWriteHandler(new CustomMergeStrategy())
+                .registerWriteHandler(demoMergeStrategy)
                 .excelType(ExcelTypeEnum.XLSX)
                 .sheet("人员列表")
                 .doWrite(personList);

@@ -3,6 +3,7 @@ package com.tfxing.persondaily.test;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.tfxing.persondaily.entity.constant.JobOrderStateNodeConstant;
+import org.framework.core.BeanContainer;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.utils.CommonUtils;
 import com.tfxing.persondaily.utils.DateUtils;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -576,4 +578,34 @@ public class ApplicationTest {
         }
 
     }
+
+    @Test
+    public void testSubString() {
+        String fileName = "fsaf.jpg";
+        int index = fileName.lastIndexOf(".");
+        String fixed = fileName.substring(index+1);
+        System.out.println(fixed);
+    }
+
+    @Test
+    public void testSubString2() {
+        String glyp = "202301";
+        String gly = glyp.substring(0, 4);
+        String glp = glyp.substring(4);
+
+        System.out.println(gly);
+        System.out.println(glp);
+    }
+
+    @Test
+    public void testSingleton() throws Exception {
+        BeanContainer beanContainer = BeanContainer.getBeanContainer();
+        Class<BeanContainer> beanContainerClass = BeanContainer.class;
+        Constructor<BeanContainer> declaredConstructor = beanContainerClass.getDeclaredConstructor();
+        declaredConstructor.setAccessible(true);
+        BeanContainer beanContainer1 = declaredConstructor.newInstance();
+        System.out.println(beanContainer==beanContainer1);
+
+    }
+
 }

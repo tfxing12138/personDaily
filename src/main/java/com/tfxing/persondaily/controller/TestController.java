@@ -71,5 +71,19 @@ public class TestController {
     public void testTran2() {
         testService.testTran2();
     }
-    
+
+    @GetMapping("/testTran3")
+    public String testTran3(@RequestParam("num") Integer num) {
+        return testService.testTran3(num);
+    }
+
+    @GetMapping("/lengthOfLastWord")
+    public int lengthOfLastWord(String str) {
+        return testService.lengthOfLastWord(str);
+    }
+
+    @GetMapping("/myAtoi")
+    public int myAtoi(String str) {
+        return testService.myAtoi(str);
+    }
 }

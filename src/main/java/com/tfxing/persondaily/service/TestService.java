@@ -15,4 +15,10 @@ public interface TestService {
     void saveQuestion(Question question);
 
     void testTran2();
+
+    String testTran3(Integer num);
+
+    int lengthOfLastWord(String str);
+
+    int myAtoi(String str);
 }

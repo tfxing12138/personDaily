@@ -59,4 +59,97 @@ public class TestServiceImpl implements TestService {
         questionMapper.insert(question1);
         System.out.println(question1.getId());
     }
+
+    @Override
+    public String testTran3(Integer num) {
+        return num/10+"";
+    }
+
+    /**
+     * 'a   bcdsa  fad  '
+     * @param str
+     * @return
+     */
+    @Override
+    public int lengthOfLastWord(String str) {
+        char[] chars = str.toCharArray();
+
+        boolean firstChar = false;
+
+        int num = 0;
+
+        for (int i = chars.length-1; i >= 0 ; i--) {
+
+            char aChar = chars[i];
+            if(!Character.isWhitespace(aChar)) {
+                firstChar = true;
+            }
+
+            if(!firstChar) {
+                continue;
+            }
+
+            if(Character.isWhitespace(aChar)) {
+                break;
+            }
+
+            num++;
+        }
+
+        return num;
+    }
+
+    /**
+     * 132.afda   fa13141  saf
+     * @param str
+     * @return
+     */
+    @Override
+    public int myAtoi(String str) {
+        char[] chars = str.toCharArray();
+
+        String charStr = "";
+
+        boolean firstDigit = false;
+
+        boolean isMins = false;
+
+        for (int i = chars.length-1; i >= 0; i--) {
+            char aChar = chars[i];
+
+            if(Character.isDigit(aChar)) {
+                firstDigit = true;
+            }
+
+            if(!firstDigit) {
+                continue;
+            }
+
+            if(!Character.isDigit(aChar)) {
+                if('-' == aChar) {
+                    isMins = true;
+                }
+                break;
+            }
+
+            charStr+=aChar;
+        }
+
+        char[] strChars = charStr.toCharArray();
+
+        // 14131
+        int num = 0;
+        for (int i = strChars.length-1; i >= 0 ; i--) {
+            int strChar = Integer.parseInt(String.valueOf(strChars[i]));
+
+            double pow = Math.pow(10, i);
+            num = (int) (num + (strChar*pow));
+        }
+
+        if(isMins) {
+            num *= -1;
+        }
+
+        return num;
+    }
 }
