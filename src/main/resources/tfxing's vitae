@@ -1,0 +1,208 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[lmargin=1in,rmargin=1in,tmargin=1in,bmargin=1in]{geometry}
+\usepackage{ctex}
+\usepackage{cv_style}
+
+
+% -------------------
+% Content
+% -------------------
+\begin{document}
+
+
+% -------------------
+% Title
+% -------------------
+\name{Java开发}{black}
+\noindent\begin{minipage}[c]{\textwidth} \centering
+\begin{tabular}{rcl}
+\faPhone\ 18370240624 & \textbullet & \faEnvelopeO\ T18370240624@163.com \\
+
+\end{tabular}
+\end{minipage} \par\vspace{0.5cm}
+
+
+
+
+% -------------------
+% Education & Research Interests
+% -------------------
+\cvsection{个人信息}
+
+\textbf{姓名：}\emph{谭福兴} \par
+
+\textbf{年龄：}\emph{24} \par
+
+\textbf{籍贯：}\emph{江西赣州} \par
+
+\textbf{工作经验：}\emph{2.5年} \par
+\twomedskip
+
+\twomedskip
+
+% -------------------
+% Teaching Experiences
+% -------------------
+\cvsection{个人技能}
+\begin{itemize}
+    \item 扎实的java基础，熟悉数据结构（手写红黑树、链表等数据结构），熟练使用泛型、反射进行开发。
+    \item 熟练 Spring,SpringMVC,Mybatis三大框架，能够基于SSM框架整合开发。
+    \item 熟练掌握SpringBoot框架，能够熟练的使用SpringBoot和SpringCloud进行微服务架构的开发，并整合MybatisPlus，Redis，rocketmq等第三方技术。
+    \item 熟练使用SpringCloud各大组件，例如：Nacos,Openfeign等组件，并且能应用其完成业务开发。
+    \item 熟练使用rocketmq，应用于分布式事务，并应用mq完成业务开发。
+    \item 熟练使用mysql，根据业务编写sql代码，并进行sql调优。熟悉innodb索引结构，事务ACID特性。
+    \item 熟练使用NoSQL非关系型数据库Redis,熟悉Redis五种数据类型特点及应用场景,熟悉基于redis实现的分布式锁，并用其实现业务功能。
+    \item 熟悉Linux系统操作、docker，使用linux进行项目部署，个人博客的搭建。熟练使用Git版本控制工具。
+    \item 了解jvm的内存结构，类加载机制，垃圾回收算法。
+    \item 了解ElasticSearch搜索引擎，能使用ES完成分页，过滤，高亮查询等功能。配置IK分词器进行中文关键字匹配搜索，以及简单自定义添加词库。
+    \item {熟悉静态页面HTML,了解JavaScript,JQuery,Ajax等前端技术开发,熟悉Vue框架，Element组件库。
+    \item 个人博客：http://www.tfxing.top （共13篇博客，数据结构三篇（红黑树、链表），泛型反射、aop、linux等）
+    \item 代码简洁之道忠实拥护者，对代码的简洁、优雅性有一定的追求。规范命名，一个方法只做一件事，做好一件事。
+\end{itemize}
+
+% \teachingEntry{扎实的java基础，熟连掌握java集合，泛型，反射，io流，jdk8的四个函数式接口，Lambda表达式，Stream流，熟悉对OOP编程思想。}
+
+
+
+% \teachingEntry{熟练 Spring,SpringMVC,Mybatis三大框架，能够基于SSM框架整合开发。并熟练使用MybatisPlus框架进行业务开发。}
+
+% \teachingEntry{熟练掌握SpringBoot框架，能够熟练的使用SpringBoot和SpringCloud进行微服务架构的开发，并整合MybatisPlus，Redis，ElasticSearch等第三方技术，熟悉相关SpringBoot注解的使用,了解SpringBoot相关自动装配的原理。}
+
+% \teachingEntry{熟练使用SpringCloud各大组件，例如：Nacos,Eureka,Openfeign等组件,并且能应用其完成业务开发。}
+
+% \teachingEntry{熟练使用rocketmq,熟练使用rocketmq发送延迟消息,顺序消息等,并应用其完成业务开发。}
+
+% \teachingEntry{熟练使用MySQL数据库和JDBC编程技术,能够熟练的编写相关sql进行相关的查询,熟悉innoDB索引结构，了解事务ACID特性。}
+
+
+% \teachingEntry{熟练使用NoSQL非关系型数据库Redis作为缓存,熟悉Redis五种数据类型特点及应用场景，使用list实现问卷答题功能。熟悉基于redis实现的分布式锁，并用其实现业务功能。}
+
+%  \teachingEntry{熟练使用Git版本控制工具，熟练使用Github，gitlab进行代码托管,回退、合并、解决代码冲突等操作。熟悉Linux基本操作，能够熟练使用Linux常用指令。熟练使用docker安装各类组件。能够独立完成项目的运维部署。}
+
+% \teachingEntry{熟悉java多线程编程，能够保证多线程场景种的线程安全，熟练使用Lock锁和synchronized关键字实现java多线程之间的通信。熟悉volatile关键字的使用以及其原理。了解CAS的原理。}
+
+%  \teachingEntry{熟悉ElasticSearch搜索引擎，能使用ES完成分页，过滤，高亮查询等功能。配置IK分词器进行中文关键字匹配搜索，以及简单自定义添加词库。}
+
+% \teachingEntry{了解jvm的内存结构，类加载机制，垃圾回收算法。}
+
+% \teachingEntry{熟悉静态页面HTML,了解JavaScript,JQuery,Ajax等前端技术开发,熟悉Vue框架，Element组件库。}
+
+ \twomedskip
+ \cvsection{工作经验}
+ \twomedskip
+\textbf{2020年6月到2021年4月 \qquad 深圳三十天科技有限公司 \qquad Java服务端工程师}
+
+\twomedskip
+\textbf{2021年6月到2022年8月 \qquad 深圳市一页科技有限公司 \qquad  Java开发工程师}
+
+\twomedskip
+\textbf{2022年9月到2023年2月 \qquad 深圳飞速创软科技有限公司 \quad Java开发工程师}
+
+\twomedskip
+
+\cvsection{项目经验}
+
+\textbf{项目一：}\emph{极氪定薪系统} \par
+\twomedskip
+
+\textbf{软件架构：}\emph{SpringBoot、MybatisPlus、Redis、
+EasyExcel} \par
+
+\textbf{开发环境：}\emph{Windows,IDEA,JDK1.8,MySQL,Maven,Git} \par
+
+\textbf{项目描述：}\emph{极氪定薪系统项目为极氪汽车公司的人才招聘定薪系统，负责极氪招聘人才的信息录入（单个录入和批量导入两种方式）。通过人员的社保缴纳基数及工资基数自动算出社保及各类数据。可以在录入时进行审批流程的配置，不同的审批人按各自的角色权限拥有不同字段的查看权限。不同阶段的审批人员可以按阶段为入职人员进行审批，最后录入归档。} \par
+
+\textbf{责任描述：}\par
+
+ \teachingEntry{定薪项目后端主要负责人。从零到一的项目开发，数据表设计、方案设计、项目搭建到最终实现上线。}
+
+\teachingEntry{入职人员的单个录入及批量导入功能。}
+
+\teachingEntry{定薪审批流开发。审批流程配置，各个阶段的审批、最终归档。}
+
+\teachingEntry{系统操作日志，使用AOP切面的形式实现。}
+
+\teachingEntry{字段权限控制，各个阶段各个角色拥有不同的字段的查看权限（使用反射加注解的方式实现）}
+
+\teachingEntry{各入职类型的入职人员列表excel导出功能}
+
+\textbf{技术描述：}\par
+
+\teachingEntry{整体使用SpringBoot 和MybatisPlus 作为项目的基础架构进行开发。}
+
+\teachingEntry{使用aspectj开发系统操作日志功能，aop横向切面。}
+
+\teachingEntry{使用反射和泛型实现代码的精简，优雅性（按功能抽离方法），使用反射控制各个角色拥有的字段权限。}
+
+\teachingEntry{使用easyexcel实现入职人员的批量导入。}
+
+\teachingEntry{使用xxljob实现定时任务的配置。}
+
+
+\twomedskip
+
+\textbf{项目二：}\emph{BPO业务管理系统} \par
+\twomedskip
+\textbf{软件架构：}\emph{SpringBoot,SpringCloud,MybatisPlus,Redis,fastDFS,easyExcel,Nacos,Nginx,Vue, rocketmq} \par
+
+\textbf{开发环境：}\emph{ldea, JDK1.8，MySQL, Maven} \par
+
+\textbf{项目描述：}\emph{bpo业务管理系统是一个针对场地用工的管理系统，场地管理人员能在系统中针对自己场地的业务在班次管理模块中进行班次的创建，在人员管理模块中进行自己项目的人员的管理，例如修改各个员工的基本信息和薪资标准等，工人上班通过打卡设备会自动生成考勤，并根据每个员工的薪资标准生成对应的账单，管理人员可以在考勤管理中查看到员工的出勤状况，在财务管理模块进行账单的核对和薪资的发放。同时拥有微信小程序端，管理人员也可以在小程序端进行上面的操作，员工可以通过小程序报名班次并提现自己的工资到自己的银行卡或微信} \par
+
+\textbf{责任描述：}
+
+\teachingEntry{考勤管理模块:根据员工的排班生成员工的考勤，并根据打卡设备上传的打卡时间计算出勤的时长，判断该员工的出勤状态，手动审批考勤。}
+
+ \teachingEntry{财务管理模块:根据考勤生成对应的账单，并拥有审批、修改，发薪的功能。可配置审批流程，需要流程节点中的人员审批过后才能发薪。}
+
+\teachingEntry{人员管理模块:通过人员姓名或身份证搜索，修改人员的基本信息，上传身份证图片和头像，修改人员的薪资标准，根据各个项目进行过滤。}
+
+\teachingEntry{财务管理发薪:同时对接三个系统实现对员工的发薪功能，使用金蝶系统进行发薪。}
+
+\twomedskip
+\textbf{技术描述：}\par
+\twomedskip
+\teachingEntry{使用SpringBoot+SpringCloud作为项目主体架构。}
+
+\teachingEntry{Nacos搭建分布式环境，使用OpenFeign进行远程微服务调用。}
+
+\teachingEntry{使用分布式文件存储系统FastDFS存储员工的身份证，头像图片，附件等。}
+
+\teachingEntry{使用mybatisPlus进行与数据库的交互。逆向工程生成数据库表的实现类。}
+
+\teachingEntry{使用easyExcel对员工考勤及账单进行导入和导出。}
+
+\teachingEntry{使用Redis作为分布式锁保证线程安全。}
+
+\teachingEntry{使用白名单进行请求拦截，提高后台系统的安全性。}
+
+
+
+\twomedskip
+
+\twomedskip
+
+
+\cvsection{自我评价}
+\teachingEntry{责任心强，适应能力较强，能够快速适应新环境，对待工作一丝不苟。}
+
+\teachingEntry{具有良好的沟通能力，易与人相处，具有较强的团队精神和协调能力。}
+
+\teachingEntry{逻辑思维能力强，思路清晰，学习能力强，对新技术有强烈的好奇心 。}
+
+\teachingEntry{具有较强的抗压能力和乐观心态，能快速适应不同的环境，待人处事真诚。}
+
+% -------------------
+% Employment
+% -------------------
+\cvsection{求职意向}
+
+\textbf{目标职位：}\emph{java开发工程师} \par
+
+\textbf{目标地点：}\emph{深圳} \par
+
+\textbf{工作性质：}\emph{Java开发} \par
+
+\textbf{到岗时间：}\emph{随时到岗} \par
+
+\end{document}
