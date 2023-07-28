@@ -21,4 +21,6 @@ public interface TestService {
     int lengthOfLastWord(String str);
 
     int myAtoi(String str);
+
+    void testTransfer();
 }

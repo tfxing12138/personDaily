@@ -10,7 +10,7 @@ import java.util.Date;
 
 @EnableScheduling
 @SpringBootApplication
-
+@MapperScan("com.tfxing.persondaily.dao")
 public class PersonDailyApplication {
 
     public static void main(String[] args) {

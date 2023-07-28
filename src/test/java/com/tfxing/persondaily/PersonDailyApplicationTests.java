@@ -1,24 +1,32 @@
 package com.tfxing.persondaily;
 
+import com.healthmarketscience.jackcess.*;
+import com.linuxense.javadbf.DBFWriter;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.PersonFather;
 import com.tfxing.persondaily.entity.po.PersonSon;
 import com.tfxing.persondaily.entity.po.User;
 import com.tfxing.persondaily.entity.rbTree.RBNode;
 import com.tfxing.persondaily.entity.rbTree.RBTree;
+import com.tfxing.persondaily.utils.DateUtils;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -282,4 +290,199 @@ class PersonDailyApplicationTests {
         Map<String, String> map = list.stream().collect(Collectors.toMap(Person::getClassName, Person::getPersonName));
         System.out.println(map);
     }
+
+    @Test
+    public void testDateUtil() {
+        /*System.out.println(DateUtils.getMonthFirstDay(new Date()));
+        System.out.println(DateUtils.getMonthLastDay(new Date()));*/
+        List<Date> dateList = Arrays.asList(new Date(),new Date());
+
+        Set<Date> set = new HashSet<>();
+
+        for (Date date : dateList) {
+            Date firstDate = DateUtils.getMonthFirstDay(date);
+            set.add(firstDate);
+        }
+
+        for (Date date : set) {
+            System.out.println(date);
+        }
+    }
+
+    @Test
+    public void testDateComplier() {
+        Date date1 = new Date();  // 假设为当前日期和时间
+        Date date2 = new Date(System.currentTimeMillis() + 86400000);  // 假设为明天的日期和时间
+
+        System.out.println(date1.after(date2));
+    }
+
+    @Test
+    public void testSj() {
+        StringJoiner sj = new StringJoiner(",");
+            sj.add("hasGrossProfit");
+            sj.add("-");
+            sj.add("hasPerfBase");
+            sj.add("-");
+            sj.add("hasBadDeb");
+            sj.add("-");
+            sj.add("hasExchange");
+            sj.add("-");
+            sj.add("hasReimburse");
+            sj.add("-");
+
+        sj.add("hasAdjustment");
+        sj.add("-");
+
+        String sjStr = sj.toString();
+        sjStr = sjStr.substring(0,sjStr.length()-2);
+        System.out.println(sjStr);
+
+        String[] split = sjStr.split(",");
+
+        for (String s : split) {
+            System.out.print(s+"  ");
+        }
+    }
+
+    @Test
+    public void testColl() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(null);
+
+        System.out.println(list);
+    }
+
+    @Test
+    public void testGenNum() {
+        String serialNumber = generateUniqueSerialNumber();
+        System.out.println(serialNumber + "  " + serialNumber.length());
+    }
+
+    private static final String PREFIX = "BR";
+    private static final int SERIAL_NUMBER_LENGTH = 10;
+
+    public static String generateUniqueSerialNumber() {
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String random = generateRandomNumber();
+        String uniqueSerialNumber = PREFIX + timestamp + random;
+
+        // 如果流水号超过指定长度，可以根据需求进行截取或其他处理
+        if (uniqueSerialNumber.length() > PREFIX.length() + SERIAL_NUMBER_LENGTH) {
+            uniqueSerialNumber = uniqueSerialNumber.substring(0, PREFIX.length() + SERIAL_NUMBER_LENGTH);
+        }
+
+        return uniqueSerialNumber;
+    }
+
+    private static String generateRandomNumber() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000000);  // 随机生成一个6位数
+        return String.format("%06d", randomNumber);  // 格式化为6位数字
+    }
+
+    @Test
+    public void testJsonObject() {
+        String jsonStr = "{\n" +
+                "\t\"code\": \"SUCCESS\",\n" +
+                "\t\"data\": \"{\n" +
+                "\t\t\"vchId\": \"34325\"\n" +
+                "\t}\"\n" +
+                "}";
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+//这里同样支持mdb和accdb
+
+        Database db = DatabaseBuilder.create(Database.FileFormat.V2000, new File("d:\\new.mdb"));
+
+        Table newTable;
+
+        try {
+
+//刚才是创建文件，这里是在文件里创建表，字段名，字段类型
+
+            newTable = new TableBuilder("Archives")
+
+                    .addColumn(new ColumnBuilder("档案号")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("编制单位")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("案卷正题名")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("案卷题目长度")
+
+                            .setSQLType(Types.INTEGER))
+
+                    .addColumn(new ColumnBuilder("档案盒规格")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("编制单位长度")
+
+                            .setSQLType(Types.INTEGER))
+
+                    .toTable(db);
+
+//插入一条数据测试
+
+            newTable.addRow("12", "foo","212",44,"323",56);
+
+        } catch (SQLException e) {
+
+// TODO Auto-generated catch block
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+    @Test
+
+    public void operator() throws Exception {
+
+        File mdbFile = new File("C:\\Users\\Administrator\\Desktop\\personal\\test.mdb");
+
+        if (mdbFile.exists()) {
+
+            Database dbin = DatabaseBuilder.open(mdbFile);
+
+            Table table = dbin.getTable("Archives");
+
+            table.addRow("档案号 新增测试", "编制单位新增测试", "案卷正题目新增测试",55, "档案盒规格测试", 5);
+
+        }
+
+    }
+
+    @Test
+    public void testWriteDbf() {
+        File mdbFile = new File("C:\\Users\\Administrator\\Desktop\\personal\\test.dbf");
+
+        List<String> columnNames = Arrays.asList("one","two","three");
+
+        try (DBFWriter dbfWriter = new DBFWriter(new FileOutputStream(mdbFile), StandardCharsets.UTF_8)) {
+            String[] rowData = new String[]{"one","two","three"};
+            dbfWriter.addRecord(rowData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testStr() {
+        String value = "5401";
+        System.out.println(String.valueOf(value).replace(".",""));
+    }
+
 }

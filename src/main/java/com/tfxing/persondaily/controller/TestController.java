@@ -86,4 +86,11 @@ public class TestController {
     public int myAtoi(String str) {
         return testService.myAtoi(str);
     }
+
+    @GetMapping("/testTransfer")
+    public void testTransfer() {
+        testService.testTransfer();
+    }
+
+
 }

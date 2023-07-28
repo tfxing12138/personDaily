@@ -3,6 +3,7 @@ package com.tfxing.persondaily.controller;
 import com.tfxing.persondaily.entity.ResponseInfo;
 import com.tfxing.persondaily.entity.annotation.Listen;
 import com.tfxing.persondaily.entity.po.Answer;
+import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.Question;
 import com.tfxing.persondaily.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author :tanfuxing

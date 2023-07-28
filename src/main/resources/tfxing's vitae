@@ -35,7 +35,7 @@
 
 \textbf{籍贯：}\emph{江西赣州} \par
 
-\textbf{工作经验：}\emph{2.5年} \par
+\textbf{工作经验：}\emph{3年} \par
 \twomedskip
 
 \twomedskip
@@ -46,17 +46,15 @@
 \cvsection{个人技能}
 \begin{itemize}
     \item 扎实的java基础，熟悉数据结构（手写红黑树、链表等数据结构），熟练使用泛型、反射进行开发。
-    \item 熟练 Spring,SpringMVC,Mybatis三大框架，能够基于SSM框架整合开发。
     \item 熟练掌握SpringBoot框架，能够熟练的使用SpringBoot和SpringCloud进行微服务架构的开发，并整合MybatisPlus，Redis，rocketmq等第三方技术。
-    \item 熟练使用SpringCloud各大组件，例如：Nacos,Openfeign等组件，并且能应用其完成业务开发。
     \item 熟练使用rocketmq，应用于分布式事务，并应用mq完成业务开发。
     \item 熟练使用mysql，根据业务编写sql代码，并进行sql调优。熟悉innodb索引结构，事务ACID特性。
     \item 熟练使用NoSQL非关系型数据库Redis,熟悉Redis五种数据类型特点及应用场景,熟悉基于redis实现的分布式锁，并用其实现业务功能。
     \item 熟悉Linux系统操作、docker，使用linux进行项目部署，个人博客的搭建。熟练使用Git版本控制工具。
+    \item 熟练使用SpringCloud各大组件，例如：Nacos,Openfeign等组件，并且能应用其完成业务开发。
     \item 了解jvm的内存结构，类加载机制，垃圾回收算法。
-    \item 了解ElasticSearch搜索引擎，能使用ES完成分页，过滤，高亮查询等功能。配置IK分词器进行中文关键字匹配搜索，以及简单自定义添加词库。
-    \item {熟悉静态页面HTML,了解JavaScript,JQuery,Ajax等前端技术开发,熟悉Vue框架，Element组件库。
-    \item 个人博客：http://www.tfxing.top （共13篇博客，数据结构三篇（红黑树、链表），泛型反射、aop、linux等）
+    \item 了解ElasticSearch搜索引擎，能使用ES完成各类需求。
+    \item 个人博客：http://www.tfxing.top [共13篇博客，数据结构三篇（红黑树、链表），泛型反射、aop、linux等]
     \item 代码简洁之道忠实拥护者，对代码的简洁、优雅性有一定的追求。规范命名，一个方法只做一件事，做好一件事。
 \end{itemize}
 
