@@ -8,6 +8,7 @@ import com.tfxing.persondaily.entity.po.PersonSon;
 import com.tfxing.persondaily.entity.po.User;
 import com.tfxing.persondaily.entity.rbTree.RBNode;
 import com.tfxing.persondaily.entity.rbTree.RBTree;
+import com.tfxing.persondaily.utils.ArrayUtils;
 import com.tfxing.persondaily.utils.DateUtils;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -483,6 +484,19 @@ class PersonDailyApplicationTests {
     public void testStr() {
         String value = "5401";
         System.out.println(String.valueOf(value).replace(".",""));
+    }
+
+    @Test
+    public void testArrayUtils() {
+        List<Long> arr2 = Arrays.asList(1L,2L,3L);
+        List<Long> arr1 = Arrays.asList(1L,4L,3L,5L);
+
+        List<Long> result = new ArrayList<>(arr1); // 复制 arr1 到新的列表
+
+        if (arr2 != null && !arr2.isEmpty()) {
+            result.removeAll(arr2); // 移除 arr2 中的元素
+        }
+        System.out.println(result);
     }
 
 }
