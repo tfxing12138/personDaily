@@ -1,5 +1,7 @@
 package com.tfxing.persondaily;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.healthmarketscience.jackcess.*;
 import com.linuxense.javadbf.DBFWriter;
 import com.tfxing.persondaily.entity.po.Person;
@@ -12,6 +14,7 @@ import com.tfxing.persondaily.utils.ArrayUtils;
 import com.tfxing.persondaily.utils.DateUtils;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -499,4 +502,83 @@ class PersonDailyApplicationTests {
         System.out.println(result);
     }
 
+    @Test
+    public void testSplit() {
+        System.out.println("借-D".split("-")[1]);
+    }
+
+    @Test
+    public void testRelation() {
+        Person link = new Person(1111L, "link");
+
+        Person person = changePerson(link);
+//        link = person;
+
+        System.out.println(link);
+
+    }
+
+    private Person changePerson (Person link) {
+        Person hello = new Person(1111L, "hello");
+
+        link = hello;
+
+        return link;
+    }
+
+    @Test
+    public void testPredict() {
+//        System.out.println(Long.valueOf(168411908).equals(168903908));
+        String acctCode = "=<1001:1009>A@{%:1}";
+        acctCode = acctCode.substring(acctCode.indexOf("<")+1,acctCode.indexOf(">"));
+        if(acctCode.contains(":")) {
+            String[] acctCodeArr = acctCode.split(":");
+            for (String acctCodeItem : acctCodeArr) {
+                System.out.println(acctCodeItem);
+            }
+
+        }
+        System.out.println(acctCode);
+    }
+
+    /**
+     * 4组
+     * 万（筒、条）：1 ~ 9 每个数字4张，共 9 * 4 = 36 张
+     * 花牌：东、南、西、北、中、发、白 每个1张，共 7 * 4 = 28 张
+     * 共计：36 + 7 = 43 张（每个花色9张 * 3种 + 花牌7张）
+     *
+     * 14 13 13 13
+     */
+    @Test
+    public void testMahjong() {
+        String[] tong = {""};
+//        String[] cardArr =
+
+    }
+
+    @Test
+    public void testMd5() {
+//        String salt = SecureUtil.md5(IdUtil.fastSimpleUUID());
+        String salt = "16ec7e8dd518ddb7e3fdb7c26348577c";
+        System.out.println(salt);
+        String passwordEncode = new Md5Hash("Link1234" + salt).toHex();
+        System.out.println(passwordEncode);
+
+    }
+
+    @Test
+    public void testSplit1() {
+        String str = "12,xx,,fad";
+
+        String[] split = str.split(",");
+        for (String s : split) {
+            System.out.println(s);
+        }
+    }
+
+    @Test
+    public void testMath() {
+        int i = 1000 * 60 * 60 * 12 * 2 / 1000;
+        System.out.println(i);
+    }
 }
