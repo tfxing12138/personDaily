@@ -578,7 +578,6 @@ class PersonDailyApplicationTests {
 
     @Test
     public void testMath() {
-        int i = 1000 * 60 * 60 * 12 * 2 / 1000;
-        System.out.println(i);
+        // aaaaaa
     }
 }
