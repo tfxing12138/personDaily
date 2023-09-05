@@ -578,7 +578,6 @@ class PersonDailyApplicationTests {
 
     @Test
     public void testMath() {
-        // aaaaaaa
-        // bbbbbbb
+        // aaaaaa
     }
 }
