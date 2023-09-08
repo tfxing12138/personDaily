@@ -1,5 +1,6 @@
 package com.tfxing.persondaily;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.healthmarketscience.jackcess.*;
@@ -10,10 +11,8 @@ import com.tfxing.persondaily.entity.po.PersonSon;
 import com.tfxing.persondaily.entity.po.User;
 import com.tfxing.persondaily.entity.rbTree.RBNode;
 import com.tfxing.persondaily.entity.rbTree.RBTree;
-import com.tfxing.persondaily.utils.ArrayUtils;
-import com.tfxing.persondaily.utils.DateUtils;
+import com.tfxing.persondaily.utils.*;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -21,9 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -578,8 +576,186 @@ class PersonDailyApplicationTests {
 
     @Test
     public void testMath() {
-        // aaaaaa
-        // bbbbbb
-        // cccccc
+        List<String> strings = Arrays.asList("目的港文件费", "你好", "再煎");
+
     }
+
+    @Test
+    public void readMarkdown() {
+        // 指定Markdown文件的路径
+        String filePath = "src/main/resources/EnglishStudy.md";
+
+        Arrays.asList("adj","n","vt","v","vi");
+
+
+        try {
+            // 创建一个BufferedReader来读取文件
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+            String line;
+            // 逐行读取文件内容并打印到控制台
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            // 关闭文件流
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testReplace() {
+        String str = "**xfsda*sdf*";
+    }
+
+    @Test
+    public void testEng() {
+
+    }
+
+    @Data
+    class WordItem {
+        private String wordCn;
+
+        private String wordEng;
+
+        private List<String> exampleSentenceList;
+    }
+
+    private List<Integer> numbers;
+    private Random random;
+    private Map<String,WordItem> wordMap;
+    private List<String> keyList;
+
+    private Boolean isEnd = false;
+
+    @Test
+    public void testWordExam() {
+        System.out.println("init....");
+        numbers = new ArrayList<>();
+        random = new Random();
+        wordMap = new HashMap<>();
+        keyList = new ArrayList<>();
+
+        List<String> wordCnPrefixList = Arrays.asList("adj", "n", "vt", "v", "vi");
+
+        // 指定Markdown文件的路径
+        String filePath = "src/main/resources/EnglishStudy.md";
+
+        try {
+            // 创建一个BufferedReader来读取文件
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+            WordItem wordItem = new WordItem();
+            StringJoiner wordCn = new StringJoiner("\n");
+            List<String> exampleSentenceList = new ArrayList<>();
+
+            String line;
+            // 逐行读取文件内容并打印到控制台
+            while ((line = reader.readLine()) != null) {
+                if(skip(line)) {
+                    continue;
+                }
+
+                if(line.startsWith("**") && isEnd) {
+                    String wordCnStr = wordCn.toString();
+
+                    wordItem = new WordItem();
+                    String wordEng = line.replaceAll("\\*","");
+                    wordItem.setWordEng(wordEng);
+                    wordItem.setWordCn(wordCn.toString());
+                    wordItem.setExampleSentenceList(exampleSentenceList);
+
+                    wordMap.put(wordCnStr, wordItem);
+                    keyList.add(wordCnStr);
+
+                    wordCn = new StringJoiner("\n");
+                    exampleSentenceList = new ArrayList<>();
+                    isEnd = false;
+
+                    continue;
+                }
+
+                if (line.startsWith("**") && !isEnd) {
+                    String wordEng = line.replaceAll("\\*","");
+                    wordItem.setWordEng(wordEng);
+
+                    isEnd = true;
+                }
+
+                if(containsWordPrefix(line,wordCnPrefixList)) {
+                    wordCn.add(line);
+                }
+
+                if(isNumPrefix(line)) {
+                    exampleSentenceList.add(line);
+                }
+            }
+
+            // 关闭文件流
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 初始化数字列表，每个数字出现2次
+            for (int i = 0; i < keyList.size(); i++) {
+                numbers.add(i);
+                numbers.add(i);
+            }
+
+            System.out.println(wordMap);
+        }
+    }
+
+    /**
+     * 是否以数字.开头
+     * @param line
+     * @return
+     */
+    private boolean isNumPrefix(String line) {
+        return line.matches("^\\d+\\..*");
+    }
+
+    /**
+     * 以预设开头匹配
+     * @param line
+     * @param wordCnPrefixList
+     * @return
+     */
+    private boolean containsWordPrefix(String line, List<String> wordCnPrefixList) {
+        if(CollectionUtil.isEmpty(wordCnPrefixList)) {
+            return false;
+        }
+
+        for (String wordCnPrefix : wordCnPrefixList) {
+            if(line.startsWith(wordCnPrefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean skip(String line) {
+        return StringUtils.isBlank(line) ||
+                line.startsWith("#") ||
+                line.startsWith("_") ||
+                line.startsWith("例句");
+    }
+
+    @Test
+    public void testStartWith() {
+//        System.out.println("# 英语资料".startsWith("#"));
+        String text = "43. This species is extremely rare.";
+
+        // 使用正则表达式匹配以数字字符串开头的文本
+        if (text.matches("^\\d+\\..*")) {
+            System.out.println("字符串以数字字符串开头。");
+        } else {
+            System.out.println("字符串不以数字字符串开头。");
+        }
+    }
+
 }
