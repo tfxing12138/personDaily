@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.tfxing.persondaily.dao.AnswerMapper;
 import com.tfxing.persondaily.dao.QuestionMapper;
 import com.tfxing.persondaily.entity.po.Answer;
+import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.Question;
 import com.tfxing.persondaily.service.QuestionService;
 import com.tfxing.persondaily.utils.CommonUtils;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author :tanfuxing
@@ -56,6 +58,8 @@ public class QuestionServiceImpl2 implements QuestionService {
 
     @Override
     public Boolean testEqNull() {
+
+
         return null;
     }
 }

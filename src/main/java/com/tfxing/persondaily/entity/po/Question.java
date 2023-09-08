@@ -26,5 +26,10 @@ public class Question {
     @TableField(exist = false)
     @ExcelIgnore
     private Long parentAnswerId;
-    
+
+    public Question() {}
+
+    public Question(String description) {
+        this.description = description;
+    }
 }

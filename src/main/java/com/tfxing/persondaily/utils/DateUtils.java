@@ -4,6 +4,7 @@ import org.assertj.core.util.DateUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -64,5 +65,47 @@ public class DateUtils {
     public static Date getDateYearMonthByDate(Date datefm) throws ParseException {
         String dateStr = parseDateToStr("yyyy-MM", datefm);
         return new SimpleDateFormat("yyyy-MM").parse(dateStr);
+    }
+
+    /**
+     * 获取一天的结束时间
+     * @param date 时间
+     * @return Date
+     */
+    public static Date getEndOfDay(Date date) {
+        // 创建 Calendar 对象
+        Calendar calendar = Calendar.getInstance();
+        // 设置日期为指定日期
+        calendar.setTime(date);
+        // 设置时间为最后一秒
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        // 获取结束时间
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取date所属月的第一天的日期
+     * @param date
+     * @return
+     */
+    public static Date getMonthFirstDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取date所属月的最后一天的日期
+     * @param date
+     * @return
+     */
+    public static Date getMonthLastDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
     }
 }

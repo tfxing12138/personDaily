@@ -6,6 +6,7 @@ import com.tfxing.persondaily.entity.po.Question;
 import com.tfxing.persondaily.service.TestService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -151,5 +152,20 @@ public class TestServiceImpl implements TestService {
         }
 
         return num;
+    }
+
+    @Override
+    @Transactional
+    public void testTransfer() {
+        questionMapper.insert(new Question("testTransfer2023711"));
+
+        testTransferInner();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void testTransferInner() {
+        questionMapper.insert(new Question("testTransferInner2023711"));
+
+        int i = 1/0;
     }
 }

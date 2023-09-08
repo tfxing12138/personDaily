@@ -1,24 +1,34 @@
 package com.tfxing.persondaily;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
+import com.healthmarketscience.jackcess.*;
+import com.linuxense.javadbf.DBFWriter;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.PersonFather;
 import com.tfxing.persondaily.entity.po.PersonSon;
 import com.tfxing.persondaily.entity.po.User;
 import com.tfxing.persondaily.entity.rbTree.RBNode;
 import com.tfxing.persondaily.entity.rbTree.RBTree;
+import com.tfxing.persondaily.utils.*;
 import lombok.Data;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -282,4 +292,470 @@ class PersonDailyApplicationTests {
         Map<String, String> map = list.stream().collect(Collectors.toMap(Person::getClassName, Person::getPersonName));
         System.out.println(map);
     }
+
+    @Test
+    public void testDateUtil() {
+        /*System.out.println(DateUtils.getMonthFirstDay(new Date()));
+        System.out.println(DateUtils.getMonthLastDay(new Date()));*/
+        List<Date> dateList = Arrays.asList(new Date(),new Date());
+
+        Set<Date> set = new HashSet<>();
+
+        for (Date date : dateList) {
+            Date firstDate = DateUtils.getMonthFirstDay(date);
+            set.add(firstDate);
+        }
+
+        for (Date date : set) {
+            System.out.println(date);
+        }
+    }
+
+    @Test
+    public void testDateComplier() {
+        Date date1 = new Date();  // 假设为当前日期和时间
+        Date date2 = new Date(System.currentTimeMillis() + 86400000);  // 假设为明天的日期和时间
+
+        System.out.println(date1.after(date2));
+    }
+
+    @Test
+    public void testSj() {
+        StringJoiner sj = new StringJoiner(",");
+            sj.add("hasGrossProfit");
+            sj.add("-");
+            sj.add("hasPerfBase");
+            sj.add("-");
+            sj.add("hasBadDeb");
+            sj.add("-");
+            sj.add("hasExchange");
+            sj.add("-");
+            sj.add("hasReimburse");
+            sj.add("-");
+
+        sj.add("hasAdjustment");
+        sj.add("-");
+
+        String sjStr = sj.toString();
+        sjStr = sjStr.substring(0,sjStr.length()-2);
+        System.out.println(sjStr);
+
+        String[] split = sjStr.split(",");
+
+        for (String s : split) {
+            System.out.print(s+"  ");
+        }
+    }
+
+    @Test
+    public void testColl() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(null);
+
+        System.out.println(list);
+    }
+
+    @Test
+    public void testGenNum() {
+        String serialNumber = generateUniqueSerialNumber();
+        System.out.println(serialNumber + "  " + serialNumber.length());
+    }
+
+    private static final String PREFIX = "BR";
+    private static final int SERIAL_NUMBER_LENGTH = 10;
+
+    public static String generateUniqueSerialNumber() {
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String random = generateRandomNumber();
+        String uniqueSerialNumber = PREFIX + timestamp + random;
+
+        // 如果流水号超过指定长度，可以根据需求进行截取或其他处理
+        if (uniqueSerialNumber.length() > PREFIX.length() + SERIAL_NUMBER_LENGTH) {
+            uniqueSerialNumber = uniqueSerialNumber.substring(0, PREFIX.length() + SERIAL_NUMBER_LENGTH);
+        }
+
+        return uniqueSerialNumber;
+    }
+
+    private static String generateRandomNumber() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000000);  // 随机生成一个6位数
+        return String.format("%06d", randomNumber);  // 格式化为6位数字
+    }
+
+    @Test
+    public void testJsonObject() {
+        String jsonStr = "{\n" +
+                "\t\"code\": \"SUCCESS\",\n" +
+                "\t\"data\": \"{\n" +
+                "\t\t\"vchId\": \"34325\"\n" +
+                "\t}\"\n" +
+                "}";
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+//这里同样支持mdb和accdb
+
+        Database db = DatabaseBuilder.create(Database.FileFormat.V2000, new File("d:\\new.mdb"));
+
+        Table newTable;
+
+        try {
+
+//刚才是创建文件，这里是在文件里创建表，字段名，字段类型
+
+            newTable = new TableBuilder("Archives")
+
+                    .addColumn(new ColumnBuilder("档案号")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("编制单位")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("案卷正题名")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("案卷题目长度")
+
+                            .setSQLType(Types.INTEGER))
+
+                    .addColumn(new ColumnBuilder("档案盒规格")
+
+                            .setSQLType(Types.VARCHAR))
+
+                    .addColumn(new ColumnBuilder("编制单位长度")
+
+                            .setSQLType(Types.INTEGER))
+
+                    .toTable(db);
+
+//插入一条数据测试
+
+            newTable.addRow("12", "foo","212",44,"323",56);
+
+        } catch (SQLException e) {
+
+// TODO Auto-generated catch block
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+    @Test
+
+    public void operator() throws Exception {
+
+        File mdbFile = new File("C:\\Users\\Administrator\\Desktop\\personal\\test.mdb");
+
+        if (mdbFile.exists()) {
+
+            Database dbin = DatabaseBuilder.open(mdbFile);
+
+            Table table = dbin.getTable("Archives");
+
+            table.addRow("档案号 新增测试", "编制单位新增测试", "案卷正题目新增测试",55, "档案盒规格测试", 5);
+
+        }
+
+    }
+
+    @Test
+    public void testWriteDbf() {
+        File mdbFile = new File("C:\\Users\\Administrator\\Desktop\\personal\\test.dbf");
+
+        List<String> columnNames = Arrays.asList("one","two","three");
+
+        try (DBFWriter dbfWriter = new DBFWriter(new FileOutputStream(mdbFile), StandardCharsets.UTF_8)) {
+            String[] rowData = new String[]{"one","two","three"};
+            dbfWriter.addRecord(rowData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testStr() {
+        String value = "5401";
+        System.out.println(String.valueOf(value).replace(".",""));
+    }
+
+    @Test
+    public void testArrayUtils() {
+        List<Long> arr2 = Arrays.asList(1L,2L,3L);
+        List<Long> arr1 = Arrays.asList(1L,4L,3L,5L);
+
+        List<Long> result = new ArrayList<>(arr1); // 复制 arr1 到新的列表
+
+        if (arr2 != null && !arr2.isEmpty()) {
+            result.removeAll(arr2); // 移除 arr2 中的元素
+        }
+        System.out.println(result);
+    }
+
+    @Test
+    public void testSplit() {
+        System.out.println("借-D".split("-")[1]);
+    }
+
+    @Test
+    public void testRelation() {
+        Person link = new Person(1111L, "link");
+
+        Person person = changePerson(link);
+//        link = person;
+
+        System.out.println(link);
+
+    }
+
+    private Person changePerson (Person link) {
+        Person hello = new Person(1111L, "hello");
+
+        link = hello;
+
+        return link;
+    }
+
+    @Test
+    public void testPredict() {
+//        System.out.println(Long.valueOf(168411908).equals(168903908));
+        String acctCode = "=<1001:1009>A@{%:1}";
+        acctCode = acctCode.substring(acctCode.indexOf("<")+1,acctCode.indexOf(">"));
+        if(acctCode.contains(":")) {
+            String[] acctCodeArr = acctCode.split(":");
+            for (String acctCodeItem : acctCodeArr) {
+                System.out.println(acctCodeItem);
+            }
+
+        }
+        System.out.println(acctCode);
+    }
+
+    /**
+     * 4组
+     * 万（筒、条）：1 ~ 9 每个数字4张，共 9 * 4 = 36 张
+     * 花牌：东、南、西、北、中、发、白 每个1张，共 7 * 4 = 28 张
+     * 共计：36 + 7 = 43 张（每个花色9张 * 3种 + 花牌7张）
+     *
+     * 14 13 13 13
+     */
+    @Test
+    public void testMahjong() {
+        String[] tong = {""};
+//        String[] cardArr =
+
+    }
+
+    @Test
+    public void testMd5() {
+//        String salt = SecureUtil.md5(IdUtil.fastSimpleUUID());
+        String salt = "16ec7e8dd518ddb7e3fdb7c26348577c";
+        System.out.println(salt);
+        String passwordEncode = new Md5Hash("Link1234" + salt).toHex();
+        System.out.println(passwordEncode);
+
+    }
+
+    @Test
+    public void testSplit1() {
+        String str = "12,xx,,fad";
+
+        String[] split = str.split(",");
+        for (String s : split) {
+            System.out.println(s);
+        }
+    }
+
+    @Test
+    public void testMath() {
+        List<String> strings = Arrays.asList("目的港文件费", "你好", "再煎");
+
+    }
+
+    @Test
+    public void readMarkdown() {
+        // 指定Markdown文件的路径
+        String filePath = "src/main/resources/EnglishStudy.md";
+
+        Arrays.asList("adj","n","vt","v","vi");
+
+
+        try {
+            // 创建一个BufferedReader来读取文件
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+            String line;
+            // 逐行读取文件内容并打印到控制台
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            // 关闭文件流
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testReplace() {
+        String str = "**xfsda*sdf*";
+    }
+
+    @Test
+    public void testEng() {
+
+    }
+
+    @Data
+    class WordItem {
+        private String wordCn;
+
+        private String wordEng;
+
+        private List<String> exampleSentenceList;
+    }
+
+    private List<Integer> numbers;
+    private Random random;
+    private Map<String,WordItem> wordMap;
+    private List<String> keyList;
+
+    private Boolean isEnd = false;
+
+    @Test
+    public void testWordExam() {
+        System.out.println("init....");
+        numbers = new ArrayList<>();
+        random = new Random();
+        wordMap = new HashMap<>();
+        keyList = new ArrayList<>();
+
+        List<String> wordCnPrefixList = Arrays.asList("adj", "n", "vt", "v", "vi");
+
+        // 指定Markdown文件的路径
+        String filePath = "src/main/resources/EnglishStudy.md";
+
+        try {
+            // 创建一个BufferedReader来读取文件
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+            WordItem wordItem = new WordItem();
+            StringJoiner wordCn = new StringJoiner("\n");
+            List<String> exampleSentenceList = new ArrayList<>();
+
+            String line;
+            // 逐行读取文件内容并打印到控制台
+            while ((line = reader.readLine()) != null) {
+                if(skip(line)) {
+                    continue;
+                }
+
+                if(line.startsWith("**") && isEnd) {
+                    String wordCnStr = wordCn.toString();
+
+                    wordItem = new WordItem();
+                    String wordEng = line.replaceAll("\\*","");
+                    wordItem.setWordEng(wordEng);
+                    wordItem.setWordCn(wordCn.toString());
+                    wordItem.setExampleSentenceList(exampleSentenceList);
+
+                    wordMap.put(wordCnStr, wordItem);
+                    keyList.add(wordCnStr);
+
+                    wordCn = new StringJoiner("\n");
+                    exampleSentenceList = new ArrayList<>();
+                    isEnd = false;
+
+                    continue;
+                }
+
+                if (line.startsWith("**") && !isEnd) {
+                    String wordEng = line.replaceAll("\\*","");
+                    wordItem.setWordEng(wordEng);
+
+                    isEnd = true;
+                }
+
+                if(containsWordPrefix(line,wordCnPrefixList)) {
+                    wordCn.add(line);
+                }
+
+                if(isNumPrefix(line)) {
+                    exampleSentenceList.add(line);
+                }
+            }
+
+            // 关闭文件流
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 初始化数字列表，每个数字出现2次
+            for (int i = 0; i < keyList.size(); i++) {
+                numbers.add(i);
+                numbers.add(i);
+            }
+
+            System.out.println(wordMap);
+        }
+    }
+
+    /**
+     * 是否以数字.开头
+     * @param line
+     * @return
+     */
+    private boolean isNumPrefix(String line) {
+        return line.matches("^\\d+\\..*");
+    }
+
+    /**
+     * 以预设开头匹配
+     * @param line
+     * @param wordCnPrefixList
+     * @return
+     */
+    private boolean containsWordPrefix(String line, List<String> wordCnPrefixList) {
+        if(CollectionUtil.isEmpty(wordCnPrefixList)) {
+            return false;
+        }
+
+        for (String wordCnPrefix : wordCnPrefixList) {
+            if(line.startsWith(wordCnPrefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean skip(String line) {
+        return StringUtils.isBlank(line) ||
+                line.startsWith("#") ||
+                line.startsWith("_") ||
+                line.startsWith("例句");
+    }
+
+    @Test
+    public void testStartWith() {
+//        System.out.println("# 英语资料".startsWith("#"));
+        String text = "43. This species is extremely rare.";
+
+        // 使用正则表达式匹配以数字字符串开头的文本
+        if (text.matches("^\\d+\\..*")) {
+            System.out.println("字符串以数字字符串开头。");
+        } else {
+            System.out.println("字符串不以数字字符串开头。");
+        }
+    }
+
 }
