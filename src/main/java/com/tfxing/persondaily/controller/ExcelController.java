@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/excel")
@@ -32,6 +33,11 @@ public class ExcelController {
     @PostMapping("/testExportPersonExcel")
     public void testExportPersonExcel(HttpServletResponse response) throws Exception {
         excelService.testExportPersonExcel(response);
+    }
+
+    @PostMapping("/exportComplexExcel")
+    public void exportComplexExcel(HttpServletResponse response) throws Exception {
+        excelService.exportComplexExcel(response);
     }
 
 }

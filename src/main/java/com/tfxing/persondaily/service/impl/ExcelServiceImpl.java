@@ -10,7 +10,6 @@ import com.tfxing.persondaily.dao.DeptMapper;
 import com.tfxing.persondaily.dao.PersonMapper;
 import com.tfxing.persondaily.dao.QuestionMapper;
 import com.tfxing.persondaily.entity.po.*;
-import com.tfxing.persondaily.entity.strategy.CustomMergeStrategy;
 import com.tfxing.persondaily.entity.strategy.DemoMergeStrategy;
 import com.tfxing.persondaily.entity.strategy.ExcelMergeIndex;
 import com.tfxing.persondaily.entity.strategy.Point;
@@ -24,12 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -96,4 +93,23 @@ public class ExcelServiceImpl implements ExcelService {
                 .doWrite(personList);
     }
 
+    /**
+     * 到处复杂的excel
+     * @param response
+     */
+    @Override
+    public void exportComplexExcel(HttpServletResponse response) throws Exception {
+        List<?> excelList = new ArrayList<>();
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf8");
+        response.setHeader("Content-disposition", "attachment;filename=" + "全部数据.xlsx" );
+
+        EasyExcel.write(response.getOutputStream())
+                .head(TPerson.class)
+                .registerWriteHandler(new DemoMergeStrategy(null))
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet("excelSheet")
+                .doWrite(excelList);
+    }
 }

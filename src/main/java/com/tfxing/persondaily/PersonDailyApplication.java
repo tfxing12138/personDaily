@@ -10,7 +10,6 @@ import java.util.Date;
 
 @EnableScheduling
 @SpringBootApplication
-
 public class PersonDailyApplication {
 
     public static void main(String[] args) {
