@@ -108,4 +108,110 @@ vt.观察;考虑;查看
 解释 interpretation
 支持 support
 视野 view
+
 ___
+
+## 2023-09-08
+___
+
+**significantly**
+
+adv.显著的;相当数量地;
+
+例句：
+1. She paused significantly before she answered. 她在回答之前因为深长地停顿了一下
+2. The President has promised to cut taxes significantly. 总统承诺大幅度减税
+3. The two sets of figures are not significantly different. 这两组数字没有明显的差别
+
+**contemporary**
+
+adj.发生（属）于同时期的;当代的
+n.同代人,同龄人;同时期的东西;
+
+例句：
+1. Contemporary African cinema has much to offer. 当代非洲电影制作艺术有很多贡献
+2. We weren't out to design a contemporary utopia. 我们不想去设计一个当代乌托邦
+3. She patronizes many contemporary British artists. 她赞助许多英国当代艺术家
+
+**theory**
+
+n.理论;原理;学说;推测;
+
+例句：
+1. The theory remains untested. 该理论仍未经过验证
+2. The theory has now been disproved. 这一理论以证明是错误的
+3. The theory does not apply universally. 这个理论并非放之四海而皆准
+
+**acknowledge**
+
+vg.承认;答谢;报偿;告知已收到;
+
+例句：
+1. She refuses to acknowledge the need for reform. 她拒不承认改革的必要性
+2. I did not acknowledge that he had done anything wrong. 我没有承认他犯了什么错
+3. You have to acknowledge that we live in a racist society. 你不得不承认我们生活在一个有种族歧视的社会
+
+**argument**
+
+n.论证;论据;争吵;内容提要;自变数;主词,受词;
+
+例句：
+1. It's a seductive argument. 这是一个很有诱惑力的论点
+2. Their main argument is fallacious. 他们的主要论点是荒谬的
+3. This argument is simply not tenable. 这种论点简直一点道理也没有
+
+**effect**
+
+n.影响;效果;作用;
+vt.产生;达到目的;
+
+例句：
+1. We warned them,but to no effect. 我们曾警告他们，但是没有起任何作用
+2. The effect has proved hard to reproduce. 这种效果经证实很难再造
+3. His voice had an almost hypnotic effect. 他的声音有一种近乎催眠的作用
+
+**environment**
+
+n.环境;外界;
+
+例句：
+1. Children need a caring environment. 儿童需要一个充满关怀的环境
+2. He has always been pro the environment. 他一向支持环境保护
+3. The environment has become a very hot issue. 环境已成为很热门的话题
+
+**among**
+
+prep.在...中间,周围是;在...之中,...之一;
+
+例句：
+1. Bees buzzed lazily among the flowers. 蜜蜂在花丛中懒洋洋地嗡嗡叫着
+2. Among sports superstars she's (the) tops. 他在超级体育明星中独占鳌头
+3. Two american soldiers among the dead. 死者中有两名美军士兵
+
+**observation**
+
+n.观察;监视;观察报告;
+
+例句：
+1. She has good powers of observation. 她有很强的观察力
+2. Is that a criticism or just an observation? 那是一种批评呢，还是一种观察评论而已?
+3. The diaries are a mixture of confession and observation. 这些日记混合着自白和一些观察
+
+**political**
+
+adj.政治的;党派的;
+
+例句：
+1. What is his political creed? 他的政治信仰是什么？
+2. He claimed political asylum. 他要求政治避难
+3. She enjoyed political life. 她喜欢政治生活
+
+显著的 significantly
+当代的 contemporary
+原理 theory
+承认 acknowledge
+论点 argument
+效果 effect
+环境 environment
+在...之中 among
+政治的 political

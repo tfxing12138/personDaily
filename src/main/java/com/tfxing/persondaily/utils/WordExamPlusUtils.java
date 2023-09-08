@@ -33,7 +33,7 @@ public class WordExamPlusUtils {
         wordMap = new HashMap<>();
         keyList = new ArrayList<>();
 
-        List<String> wordCnPrefixList = Arrays.asList("adj", "n", "vt", "v", "vi");
+        List<String> wordCnPrefixList = Arrays.asList("adj", "n", "vt", "v", "vi","adv","prep");
 
         // 指定Markdown文件的路径
         String filePath = "src/main/resources/EnglishStudy.md";
@@ -229,6 +229,12 @@ public class WordExamPlusUtils {
             int successSize = total - errorSize;
             BigDecimal rate = BigDecimal.valueOf(successSize).divide(BigDecimal.valueOf(total), 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100));
             System.out.println("本次测试，一共测试了" + total + "个单词\n正确个数：" + successSize + "\n错误个数：" + errorSize + "\n" + "正确率为：" + rate + "%");
+
+            System.out.println();
+
+            for (String errorWord : errorWordList) {
+                System.out.println(errorWord);
+            }
         }
     }
 }
