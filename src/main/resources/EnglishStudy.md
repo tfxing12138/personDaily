@@ -13,7 +13,7 @@ n.种，物种，种类
 3. There are many species of dog(s). 狗有许多种类
 4. At least one otter species,the sea otter,has a large,often dominating,effect on the structure of its own habitat
 
-**explanation** ``
+**explanation**
 
 adj.说明，解释，辩解
 

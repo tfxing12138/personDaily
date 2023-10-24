@@ -233,6 +233,17 @@ public class WordExamPlusUtils {
 
         for (String errorWord : errorWordList) {
             System.out.println(errorWord);
+        if(CollectionUtil.isNotEmpty(errorWordList)) {
+            int errorSize = errorWordList.size();
+            int successSize = total - errorSize;
+            BigDecimal rate = BigDecimal.valueOf(successSize).divide(BigDecimal.valueOf(total), 2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100));
+            System.out.println("本次测试，一共测试了" + total + "个单词\n正确个数：" + successSize + "\n错误个数：" + errorSize + "\n" + "正确率为：" + rate + "%");
+
+            System.out.println();
+
+            for (String errorWord : errorWordList) {
+                System.out.println(errorWord);
+            }
         }
     }
 }

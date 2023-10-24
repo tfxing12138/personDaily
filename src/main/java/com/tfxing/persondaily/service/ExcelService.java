@@ -13,4 +13,6 @@ public interface ExcelService {
     void testExportPersonExcel(HttpServletResponse response) throws IOException;
 
     void exportDynamicExcel(HttpServletResponse response) throws Exception;
+
+    void exportComplexExcel(HttpServletResponse response) throws Exception;
 }
