@@ -3,8 +3,16 @@ package com.tfxing.persondaily;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.enums.WriteDirectionEnum;
+import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.healthmarketscience.jackcess.*;
 import com.linuxense.javadbf.DBFWriter;
+import com.tfxing.persondaily.entity.enums.StatusCodeEnum;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.PersonFather;
 import com.tfxing.persondaily.entity.po.PersonSon;
@@ -13,6 +21,7 @@ import com.tfxing.persondaily.entity.rbTree.RBNode;
 import com.tfxing.persondaily.entity.rbTree.RBTree;
 import com.tfxing.persondaily.utils.*;
 import lombok.Data;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -28,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -757,5 +767,289 @@ class PersonDailyApplicationTests {
             System.out.println("字符串不以数字字符串开头。");
         }
     }
+
+    /**
+     * 横向的填充
+     *
+     * @since 2.1.1
+     */
+    /*@Test
+    public void horizontalFill() {
+        // 模板注意 用{} 来表示你要用的变量 如果本来就有"{","}" 特殊字符 用"\{","\}"代替
+        // {} 代表普通变量 {.} 代表是list的变量
+        String templateFileName =
+                "src/main/resources/" + "demo" + File.separator + "fill" + File.separator + "horizontal.xlsx";
+
+        String fileName = "src/main/resources/" + "horizontalFill" + System.currentTimeMillis() + ".xlsx";
+        // 方案1
+        try (ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build()) {
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+            FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.HORIZONTAL).build();
+            excelWriter.fill(data(), fillConfig, writeSheet);
+            excelWriter.fill(data(), fillConfig, writeSheet);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", "2019年10月9日13:28:28");
+            excelWriter.fill(map, writeSheet);
+        }
+    }
+
+    private Object data() {
+        return null;
+    }*/
+    @Test
+    public void testDynamicImportExcel() {
+        String excelFilePath = "src/main/resources/response1.xls"; // 替换为实际的 Excel 文件路径
+
+        // 使用 EasyExcel 读取 Excel 文件，通过 AnalysisEventListener 处理数据
+        EasyExcel.read(new File(excelFilePath), new AnalysisEventListener<List<String>>() {
+            List<String> headers = new ArrayList<>(); // 用于存储 Excel 表头信息
+            List<List<String>> data = new ArrayList<>(); // 用于存储数据行
+
+            @Override
+            public void invoke(List<String> rowData, AnalysisContext context) {
+                if (context.getCurrentRowNum() == 0) {
+                    // 处理表头行
+                    headers.addAll(rowData);
+                } else {
+                    // 处理数据行
+                    data.add(rowData);
+                }
+            }
+
+            @Override
+            public void doAfterAllAnalysed(AnalysisContext context) {
+                // 表头和数据读取完成后，可以根据 headers 动态创建数据对象
+
+                // 示例：动态创建一个数据对象并将数据映射到对象列表中
+                List<DynamicDataObject> dynamicDataList = new ArrayList<>();
+                for (List<String> rowData : data) {
+                    DynamicDataObject dynamicData = new DynamicDataObject();
+                    for (int i = 0; i < headers.size(); i++) {
+                        String columnName = headers.get(i);
+                        String cellValue = rowData.get(i);
+
+                        // 根据 columnName 动态设置对象的属性
+                        // 这里可以使用反射或其他动态属性设置方法
+
+                        // 示例：将数据映射到对象的属性
+                        if ("Column1".equals(columnName)) {
+                            dynamicData.setColumn1(cellValue);
+                        } else if ("Column2".equals(columnName)) {
+                            dynamicData.setColumn2(cellValue);
+                        }
+                        // 添加其他列的映射
+                    }
+                    dynamicDataList.add(dynamicData);
+                }
+
+                // 现在，dynamicDataList 包含了从 Excel 表中读取的数据，可以进行后续处理
+                for (DynamicDataObject dynamicData : dynamicDataList) {
+                    System.out.println(dynamicData);
+                }
+            }
+        }).sheet().doRead();
+    }
+
+    // 动态数据对象，根据 Excel 表动态创建属性
+    @Data
+    static class DynamicDataObject {
+        private String column1;
+        private String column2;
+
+        // 添加其他动态属性
+
+        // Getter 和 Setter 方法
+    }
+
+
+    @Test
+    public void testMath1() {
+//        int i = 1000 * 60 * 60 * 12 * 2 / 1000;
+        int i = 81066 / 60 / 60;
+        System.out.println(i);
+    }
+
+    @Test
+    public void testEnum() {
+        System.out.println(StatusCodeEnum.SUCCESS.name());
+    }
+
+    @Test
+    public void freeTime() {
+
+        System.out.println("hello world");
+        // 测试
+    }
+
+    @Test
+    public void testQr() {
+
+    }
+
+    @Test
+    public void dailyCode() {
+        String[] strArr = new String[]{"eat","tea","tan","ate","nat","bat"};
+
+        List<Map<String,Integer>> mapList = new ArrayList<>();
+        Map<Map<String,Integer>,List<String>> strListMap = new HashMap<>();
+        for (String str : strArr) {
+            Map<String,Integer> map = new HashMap<>();
+            String[] charArr = str.split("");
+            for (String ch : charArr) {
+                Integer count = map.get(ch);
+                if(null != count) {
+                    count += 1;
+                    map.put(ch, count);
+                } else {
+                    map.put(ch, 1);
+                }
+            }
+            List<String> strings = strListMap.get(map);
+            if(CollectionUtil.isEmpty(strings)) {
+                strListMap.put(map,Arrays.asList(str));
+            } else {
+
+                for (String string : strings) {
+
+                }
+                strListMap.put(map,strings);
+            }
+            mapList.add(map);
+        }
+
+        Map<Map<String, Integer>, List<Map<String, Integer>>> collect = mapList.stream().collect(Collectors.groupingBy(item -> item));
+        for (Map.Entry<Map<String, Integer>, List<Map<String, Integer>>> mapListEntry : collect.entrySet()) {
+            Map<String, Integer> key = mapListEntry.getKey();
+            List<String> strings = strListMap.get(key);
+            System.out.println(strings);
+        }
+
+    }
+
+
+    @Test
+    public void testGenerateNum() {
+        int length = 4;
+        UUID uuid = UUID.randomUUID();
+        String uuidStr = uuid.toString().replace("-", ""); // 移除 UUID 中的短横线
+
+        // 截取指定长度的子字符串
+        if (uuidStr.length() >= length) {
+            uuidStr = uuidStr.substring(0, length);
+        } else {
+            // 如果生成的 UUID 长度不足指定长度，可以根据需要进行填充
+            while (uuidStr.length() < length) {
+                uuidStr += "0"; // 填充 0
+            }
+        }
+        System.out.println(uuidStr);
+    }
+
+
+    public class UniqueSequenceGenerator {
+        private final long epoch = new Date().getTime(); // 自定义一个起始时间，这里为2021-01-01 00:00:00的时间戳
+        private final long workerIdBits = 5L;
+        private final long datacenterIdBits = 5L;
+        private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
+        private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+        private final long sequenceBits = 12L;
+        private final long workerIdShift = sequenceBits;
+        private final long datacenterIdShift = sequenceBits + workerIdBits;
+        private final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+        private final long sequenceMask = -1L ^ (-1L << sequenceBits);
+
+        private long workerId;
+        private long datacenterId;
+        private long lastTimestamp = -1L;
+        private long sequence = 0L;
+
+        public UniqueSequenceGenerator(long workerId, long datacenterId) {
+            if (workerId > maxWorkerId || workerId < 0) {
+                throw new IllegalArgumentException("Worker ID can't be greater than " + maxWorkerId + " or less than 0");
+            }
+            if (datacenterId > maxDatacenterId || datacenterId < 0) {
+                throw new IllegalArgumentException("Datacenter ID can't be greater than " + maxDatacenterId + " or less than 0");
+            }
+            this.workerId = workerId;
+            this.datacenterId = datacenterId;
+        }
+
+        public synchronized long nextUniqueId() {
+            long timestamp = timeGen();
+
+            if (timestamp < lastTimestamp) {
+                throw new RuntimeException("Clock moved backwards. Refusing to generate ID.");
+            }
+
+            if (timestamp == lastTimestamp) {
+                sequence = (sequence + 1) & sequenceMask;
+                if (sequence == 0) {
+                    timestamp = tilNextMillis(lastTimestamp);
+                }
+            } else {
+                sequence = 0L;
+            }
+
+            lastTimestamp = timestamp;
+
+            return ((timestamp - epoch) << timestampLeftShift) |
+                    (datacenterId << datacenterIdShift) |
+                    (workerId << workerIdShift) |
+                    sequence;
+        }
+
+        private long tilNextMillis(long lastTimestamp) {
+            long timestamp = timeGen();
+            while (timestamp <= lastTimestamp) {
+                timestamp = timeGen();
+            }
+            return timestamp;
+        }
+
+        private long timeGen() {
+            return System.currentTimeMillis();
+        }
+
+
+    }
+    @Test
+    public void testGenerateUniqueNum() {
+        UniqueSequenceGenerator generator = new UniqueSequenceGenerator(1, 1);
+
+        for (int i = 0; i < 10; i++) {
+            long uniqueId = generator.nextUniqueId();
+            System.out.println("Generated Unique ID: " + uniqueId);
+        }
+    }
+
+    @Test
+    public void testChatGpt() {
+        String str = "Hello, World!";
+        String pattern = ", wrlD!";
+        System.out.println(str.toLowerCase().contains(pattern.toLowerCase()));
+
+
+    }
+    public boolean isMatch(String str, String pattern) {
+        // 将模式中的 % 替换成正则表达式 .*
+        // 并在前后加上 ^ 和 $，表示必须从头到尾完全匹配
+        pattern = "^" + pattern.replace("%", ".*") + "$";
+        // 将 pattern 编译成正则表达式对象
+        Pattern regex = Pattern.compile(pattern);
+        // 对输入的字符串进行匹配
+        Matcher matcher = regex.matcher(str);
+        // 返回匹配结果
+        return matcher.find();
+    }
+
+    @Test
+    public void testArrays() {
+        Map<String,String> map = new HashMap<>();
+        String s = map.get(null);
+        System.out.println(s);
+//        System.out.println(Arrays.asList(null));
+    }
+
 
 }

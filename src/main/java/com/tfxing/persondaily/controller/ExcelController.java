@@ -34,4 +34,9 @@ public class ExcelController {
         excelService.testExportPersonExcel(response);
     }
 
+    @PostMapping("/exportDynamicExcel")
+    public void exportDynamicExcel(HttpServletResponse response) throws Exception {
+        excelService.exportDynamicExcel(response);
+    }
+
 }

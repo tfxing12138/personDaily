@@ -10,10 +10,7 @@ import com.tfxing.persondaily.dao.DeptMapper;
 import com.tfxing.persondaily.dao.PersonMapper;
 import com.tfxing.persondaily.dao.QuestionMapper;
 import com.tfxing.persondaily.entity.po.*;
-import com.tfxing.persondaily.entity.strategy.CustomMergeStrategy;
-import com.tfxing.persondaily.entity.strategy.DemoMergeStrategy;
-import com.tfxing.persondaily.entity.strategy.ExcelMergeIndex;
-import com.tfxing.persondaily.entity.strategy.Point;
+import com.tfxing.persondaily.entity.strategy.*;
 import com.tfxing.persondaily.service.ExcelService;
 import com.tfxing.persondaily.utils.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -96,4 +93,18 @@ public class ExcelServiceImpl implements ExcelService {
                 .doWrite(personList);
     }
 
+    @Override
+    public void exportDynamicExcel(HttpServletResponse response) throws Exception {
+        List<String> excelList = Arrays.asList("one","two","three","four","five");
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf8");
+        response.setHeader("Content-disposition", "attachment;filename=" + "全部数据.xlsx" );
+
+        EasyExcel.write(response.getOutputStream())
+                .registerWriteHandler(new DynamicMergeStrategy(excelList))
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet("测试动态导出")
+                .doWrite(excelList);
+    }
 }
