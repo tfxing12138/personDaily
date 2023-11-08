@@ -1,38 +1,29 @@
 package com.tfxing.persondaily;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.enums.WriteDirectionEnum;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.healthmarketscience.jackcess.*;
 import com.linuxense.javadbf.DBFWriter;
 import com.tfxing.persondaily.entity.enums.StatusCodeEnum;
 import com.tfxing.persondaily.entity.po.Person;
-import com.tfxing.persondaily.entity.po.PersonFather;
-import com.tfxing.persondaily.entity.po.PersonSon;
 import com.tfxing.persondaily.entity.po.User;
 import com.tfxing.persondaily.entity.rbTree.RBNode;
 import com.tfxing.persondaily.entity.rbTree.RBTree;
 import com.tfxing.persondaily.utils.*;
 import lombok.Data;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -1049,6 +1040,180 @@ class PersonDailyApplicationTests {
         String s = map.get(null);
         System.out.println(s);
 //        System.out.println(Arrays.asList(null));
+    }
+
+    @Test
+    public void testSubStr() {
+        String contactMobileNo = "18370240624";
+        System.out.println(contactMobileNo.substring(0, 3) + "****" + contactMobileNo.substring(7));
+    }
+
+    /**
+     * 测试小孔成像
+     */
+    @Test
+    public void testPinholeImaging() {
+        /**
+         * 构建一个二维坐标系
+         * 固定镜头离原点(0,0)的距离为5
+         */
+
+        SinglePoint pointA = new SinglePoint(BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+        SinglePoint pointB = new SinglePoint(BigDecimal.valueOf(20), BigDecimal.valueOf(20));
+        SinglePoint pointC = new SinglePoint(BigDecimal.valueOf(0), BigDecimal.valueOf(20));
+
+
+        System.out.println(getPinholeImaging(pointA));
+        System.out.println(getPinholeImaging(pointB));
+        System.out.println(getPinholeImaging(pointC));
+    }
+
+    class SinglePoint {
+        BigDecimal x;
+        BigDecimal y;
+
+        public SinglePoint(BigDecimal x, BigDecimal y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public String toString() {
+            return "("+x+","+y+")";
+        }
+    }
+
+    public SinglePoint getPinholeImaging(SinglePoint point) {
+        // 如果x坐标小于等于0，则消失
+        if(point.x.compareTo(BigDecimal.ZERO) <= 0) {
+            return null;
+        }
+
+        if(BigDecimal.ZERO.equals(point.y)) {
+            return new SinglePoint(BigDecimal.valueOf(10), point.y);
+        }
+
+        // 角度数
+        BigDecimal divide = point.y.divide(point.x, 2, RoundingMode.HALF_UP);
+        BigDecimal y = divide.multiply(BigDecimal.valueOf(10));
+        SinglePoint singlePoint = new SinglePoint(BigDecimal.valueOf(10), y);
+
+        return singlePoint;
+    }
+
+    @Test
+    public void test3DImg() {
+        ThreeDPoint a = new ThreeDPoint(0, 0, 10);
+        ThreeDPoint a1 = new ThreeDPoint(1, 0, 10);
+        ThreeDPoint b = new ThreeDPoint(0, 1, 10);
+        ThreeDPoint b1 = new ThreeDPoint(1, 1, 10);
+
+        Quadrilateral quadrilateral = new Quadrilateral(a, a1, b, b1);
+        System.out.println(quadrilateral);
+
+        Quadrilateral quadrilateralPinhole = getQuadrilateralPinhole(quadrilateral);
+        System.out.println(quadrilateralPinhole);
+
+    }
+
+    private Quadrilateral getQuadrilateralPinhole(Quadrilateral quadrilateral) {
+        BigDecimal quadrilateralX = getQuadrilateralX(quadrilateral, BigDecimal.valueOf(5));
+        BigDecimal quadrilateralY = getQuadrilateralY(quadrilateral, BigDecimal.valueOf(5));
+
+        ThreeDPoint point = new ThreeDPoint(0, 0, 5);
+        Quadrilateral quadrilateralPinhole = new Quadrilateral(point, quadrilateralX, quadrilateralY);
+
+        return quadrilateralPinhole;
+    }
+
+    private BigDecimal getQuadrilateralY(Quadrilateral quadrilateral, BigDecimal local) {
+        ThreeDPoint a = quadrilateral.a;
+        ThreeDPoint a1 = quadrilateral.a1;
+        BigDecimal xP2pLength = a1.x.subtract(a.x);
+        BigDecimal yP2pLength = a.z;
+
+        BigDecimal quadrilateralY = local.multiply(xP2pLength.divide(yP2pLength));
+        return quadrilateralY;
+    }
+
+    private BigDecimal getQuadrilateralX(Quadrilateral quadrilateral, BigDecimal local) {
+        ThreeDPoint a = quadrilateral.a;
+        ThreeDPoint a1 = quadrilateral.a1;
+        BigDecimal xP2pLength = a1.x.subtract(a.x);
+        BigDecimal yP2pLength = a.z;
+
+        BigDecimal quadrilateralX = local.multiply(xP2pLength.divide(yP2pLength));
+        return quadrilateralX;
+    }
+
+    class Quadrilateral {
+        ThreeDPoint a;
+        ThreeDPoint a1;
+        ThreeDPoint b;
+        ThreeDPoint b1;
+
+        public Quadrilateral(ThreeDPoint a, ThreeDPoint a1, ThreeDPoint b, ThreeDPoint b1) {
+            this.a = a;
+            this.a1 = a1;
+            this.b = b;
+            this.b1 = b1;
+        }
+
+        public Quadrilateral(ThreeDPoint point, BigDecimal quadrilateralX, BigDecimal quadrilateralY) {
+            this.a = point;
+            this.a1 = null;
+        }
+
+        public String toString() {
+            return a.toString()+"\n"+a1.toString()+"\n"+b.toString()+"\n"+b1;
+        }
+    }
+
+    class ThreeDPoint {
+        BigDecimal x;
+        BigDecimal y;
+        BigDecimal z;
+
+        public ThreeDPoint(int x, int y, int z) {
+            this.x = BigDecimal.valueOf(x);
+            this.y = BigDecimal.valueOf(y);
+            this.z = BigDecimal.valueOf(z);
+        }
+
+        public String toString() {
+            return "("+x+","+y+","+z+")";
+        }
+    }
+
+    @Test
+    public void testSin() {
+        System.out.println(Math.round(Math.sin(Math.toRadians(30)) * 100.0) / 100.0);
+        System.out.println(Math.round(Math.cos(Math.toRadians(30)) * 100.0) / 100.0);
+
+        System.out.println(Math.round(Math.cos(Math.toRadians(30)) * 100.0) / 100.0);
+
+        double angleA = 30; // 角A的度数
+        double sideB = 10; // 边b的长度
+        double sideC = 10; // 边c的长度
+
+        // 将角度转换为弧度
+        double angleAInRadians = Math.toRadians(angleA);
+
+        // 使用余弦定理计算边a的长度
+        double sideA = Math.sqrt(Math.pow(sideB, 2) + Math.pow(sideC, 2) - 2 * sideB * sideC * Math.cos(angleAInRadians));
+
+        System.out.println("边a的长度为：" + sideA);
+    }
+
+    @Test
+    public void test3DLength() {
+        double actualLength = 10; // 实际柱子长度
+        double displacement = 5.2; // 平移距离
+        double initialLengthOnPhoto = actualLength; // 初始在照片上的长度
+
+        // 计算平移后在照片上的长度
+        double lengthOnPhoto = (initialLengthOnPhoto * (actualLength - displacement)) / actualLength;
+
+        System.out.println("柱子平移后在照片上的长度为：" + lengthOnPhoto + "米");
     }
 
 
