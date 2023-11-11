@@ -35,5 +35,9 @@ public class Person extends PersonFather{
     }
 
     public Person() {}
+
+    public String toString() {
+        return id+" : "+personName;
+    }
     
 }

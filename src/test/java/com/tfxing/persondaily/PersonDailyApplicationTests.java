@@ -6,6 +6,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.healthmarketscience.jackcess.*;
 import com.linuxense.javadbf.DBFWriter;
+import com.mybatisflex.core.util.DateUtil;
 import com.tfxing.persondaily.entity.enums.StatusCodeEnum;
 import com.tfxing.persondaily.entity.po.Person;
 import com.tfxing.persondaily.entity.po.User;
@@ -27,6 +28,8 @@ import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1216,5 +1219,70 @@ class PersonDailyApplicationTests {
         System.out.println("柱子平移后在照片上的长度为：" + lengthOnPhoto + "米");
     }
 
+    @Test
+    public void testSet() {
+        List<Person> one = Arrays.asList(new Person(1L,"link"));
+        List<Person> two = Arrays.asList(new Person(1L,"link"), new Person(2L,"zelda"));
+
+
+        Set<Person> set = new HashSet<>();
+        set.addAll(one);
+        set.addAll(two);
+
+        for (Person integer : set) {
+            System.out.println(integer);
+        }
+    }
+
+    @Test
+    public void testContains() {
+        System.out.println(Arrays.asList(1,2).contains(null));
+    }
+
+    @Test
+    public void testDistance() {
+        double distance = (200 - 100) * Math.sin(Math.toRadians(50 / 2)) * 2;
+
+        int ceil = (int) Math.ceil(distance);
+        System.out.println(ceil);
+
+
+        double i = 90d / Double.valueOf(90+ceil);
+        System.out.println(i);
+        System.out.println(i*90);
+
+        /*double hight = ((y2*10-y1) / (y2*10-y1) + distance) * (y2*10-y1);
+
+        double hightTop = (y2 * 10 + y1) + hight / 2;
+        double hightButtom = (y2 * 10 + y1) - hight / 2;*/
+    }
+
+    @Test
+    public void testFormat() throws ParseException {
+        SimpleDateFormat simpleDateFormat = DateUtil.getSimpleDateFormat("yyyy-MM-dd");
+        Date date = simpleDateFormat.parse("1901-01-01");
+        System.out.println(date);
+
+
+    }
+
+    @Test
+    public  void testTrim() {
+        String unloco = "fa aa,C A";
+        String[] split = unloco.split("");
+
+        String str = "";
+        for (String s : split) {
+            if(" ".equals(s)) {
+                continue;
+            }
+
+            str += s;
+        }
+
+        unloco = str.toUpperCase();
+
+        System.out.println(unloco);
+    }
 
 }
