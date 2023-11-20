@@ -1285,4 +1285,21 @@ class PersonDailyApplicationTests {
         System.out.println(unloco);
     }
 
+    @Test
+    public void testDateFormat() {
+        SimpleDateFormat yyyymmdd = new SimpleDateFormat("YYYYMMdd");
+        String format = yyyymmdd.format(new Date());
+        System.out.println(format);
+    }
+
+    @Test
+    public void testDateOffset() {
+        Date dateParam = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateParam);
+        calendar.add(Calendar.MONTH, 1);
+        Date date = new Date(calendar.getTimeInMillis());
+        System.out.println(date);
+    }
+
 }
