@@ -1,6 +1,9 @@
 package com.tfxing.persondaily;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
@@ -25,12 +28,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1302,4 +1308,246 @@ class PersonDailyApplicationTests {
         System.out.println(date);
     }
 
+    @Test
+    public void testStrSplit1() {
+        System.out.println(trim("JIANGMEN (GD)"));
+    }
+
+    private String trim(String unloco) {
+        String[] split = unloco.split("");
+
+        boolean flag = false;
+        String str = "";
+        for (String s : split) {
+            if(" ".equals(s)) {
+                continue;
+            }
+
+            if("(".equals(s)) {
+                flag = true;
+                continue;
+            }
+
+            if(")".equals(s)) {
+                flag = false;
+                continue;
+            }
+
+            if(flag) {
+                continue;
+            }
+
+            str += s;
+        }
+
+        unloco = str.toUpperCase();
+
+        return unloco;
+    }
+
+@Test
+public void testNextGlyp() {
+    System.out.println(getNextGlypByGlyp(202212));
+    System.out.println(getNextGlypByGlyp(202312));
+    System.out.println(getNextGlypByGlyp(202310));
+}
+    private Integer getNextGlypByGlyp(Integer glyp) {
+        Integer nextGlyp = 0;
+
+        String glypStr = String.valueOf(glyp);
+        if(glypStr.endsWith("12")) {
+            String gly = glypStr.substring(0, 4);
+            int glyInt = Integer.parseInt(gly);
+            glyInt += 1;
+
+            nextGlyp = Integer.parseInt(glyInt+"01");
+        } else {
+            nextGlyp = glyp + 1;
+        }
+
+        return nextGlyp;
+    }
+
+    @Test
+    public void testMd51() {
+//        String salt = SecureUtil.md5(IdUtil.fastSimpleUUID());
+//        System.out.println(salt);
+//
+//        String passwordEncode = new Md5Hash("123456" + salt).toHex();
+//        System.out.println(passwordEncode);
+//
+//        System.out.println();
+
+        String hex = new Md5Hash("123456"+"85363b45a679ea274d016cd2a5f1eda9").toHex();
+
+        System.out.println(hex);
+
+        System.out.println("1548a6cb8f7f9ee9b12c71a02d8ba40d".equals(hex));
+    }
+
+    private static final AtomicInteger counter = new AtomicInteger(0);
+    @Test
+    public void testUUID() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("SSSssSSS");
+        String timestamp = sdf.format(new Date());
+
+        int randomNum = (int)(Math.random() * 10000);
+
+        int count = counter.incrementAndGet() % 10000;
+
+        System.out.println(timestamp + String.format("%04d%04d", randomNum, count));
+    }
+
+    @Test
+    public void testStrContain() {
+        String str = "123412";
+        System.out.println(str.contains("521"));
+    }
+
+    @Test
+    public void testDecimal() {
+        /*BigDecimal bigDecimal = new BigDecimal("<1002.01>");
+        System.out.println(bigDecimal);*/
+
+        System.out.println(isDecimal("-1"));
+    }
+
+    public static boolean isDecimal(String str) {
+        if (str == null || str.isEmpty()) {
+            // 空串或 null 不能被解析为数字
+            return false;
+        }
+
+        int i = 0;
+        if ((str.charAt(0) == '-' && str.length() > 1) || (str.charAt(0) == '+' && str.length() > 1)) {
+            // 如果是负数或正数，下标 +1 开始判断
+            i = 1;
+        }
+
+        boolean hasDecimalPoint = false;
+        for (; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '.') {
+                if (hasDecimalPoint) {
+                    // 不能有多个小数点
+                    return false;
+                } else {
+                    hasDecimalPoint = true;
+                }
+            } else if (!Character.isDigit(c)) {
+                // 非数字字符
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Test
+    public void testSubString() {
+        /*String glypStr = "202301";
+        String gly = glypStr.substring(0, 4);
+        String glp = glypStr.substring( 4);
+        System.out.println(gly);
+        System.out.println(glp);*/
+
+        System.out.println(glypFormat(202301,"YYMM"));
+    }
+
+    private String glypFormat(Integer glyp, String formatType) {
+        if(null == glyp) {
+            return "";
+        }
+
+        String input = glyp.toString();
+        String formattedDate = "";
+        String year = input.substring(0, 4);
+        String month = input.substring(4);
+
+        switch (formatType) {
+            case "YYYY-MM":
+                formattedDate = year + "-" + month;
+                break;
+            case "MM-YYYY":
+                formattedDate = month + "-" + year;
+                break;
+            case "YY-MM":
+                formattedDate = year.substring(2) + "-" + month;
+                break;
+            case "MM-YY":
+                formattedDate = month + "-" + year.substring(2);
+                break;
+            case "YYYYMM":
+                formattedDate = year + month;
+                break;
+            case "MMYYYY":
+                formattedDate = month + year;
+                break;
+            case "YYMM":
+                formattedDate = year.substring(2) + month;
+                break;
+            case "MMYY":
+                formattedDate = month + year.substring(2);
+                break;
+        }
+
+        return formattedDate;
+    }
+
+    @Test
+    public void testEq() {
+        String str = "hello world";
+        BigDecimal zero = BigDecimal.ZERO;
+        System.out.println(str.equals(zero));
+    }
+
+    @Test
+    public void testDateFormat1() {
+        String format = "YYYMMDD";
+        format = format.replaceAll("Y","y");
+        format = format.replaceAll("D","d");
+
+        System.out.println(format);
+        Date date = DateUtils.str2Date("2023-12-31","yyyy-MM-dd");
+        System.out.println(date);
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        System.out.println(sdf.format(date));
+    }
+
+    @Test
+    public void testDateBefore() {
+        System.out.println(new Date().before(DateUtils.str2Date("2023-12-31","yyyy-MM-dd")));
+    }
+
+    @Test
+    public void testSort() {
+        List<Integer> list = Arrays.asList(1,4,2,3);
+        List<Integer> collect = list.stream().sorted(Comparator.comparing(item -> item, Comparator.reverseOrder())).collect(Collectors.toList());
+        System.out.println(collect);
+    }
+
+    @Test
+    public void parseStr() {
+        GlmGenVchVo vo = new GlmGenVchVo();
+        String result = "ERROR: {\"code\": \"NoGlpForArapDate\", \"params\": [\"2024-01-06\", \"54995540008\", \"CNY\", \"500.00\"]}";
+        if (result.contains("在位置：")){
+            int i = result.indexOf("在位置：");
+            result = result.substring(0, i);
+        }
+        String s = result.replaceAll("ERROR:", "");
+        GlmGenVchVo glmGenVchVo = JSONUtil.toBean(s,GlmGenVchVo.class);  //转成对象
+
+        if ("SUCCESS".equals(glmGenVchVo.getCode())){
+            vo.setVchid(glmGenVchVo.getVchid());
+            vo.setStatus(true);
+            System.out.println(vo);
+        }
+
+
+        System.out.println(glmGenVchVo.getCode());
+
+        vo.setParams(glmGenVchVo.getParams());
+        System.out.println(vo);
+    }
 }

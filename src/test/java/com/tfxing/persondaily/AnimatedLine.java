@@ -63,6 +63,11 @@ public class AnimatedLine extends JPanel implements ActionListener {
         repaint(); // 重绘线条
     }
 
+    /**
+     * 点 -> 线, 线->面, 面->体
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Animated Line");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
